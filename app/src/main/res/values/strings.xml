@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">AndroidOnKotlin</string>
+    <string name="foreach_cycle">.foreach cycle:</string>
+    <string name="repeat_cycle">repeat cycle:</string>
+    <string name="for_cycle">for cycle:</string>
+    <string name="while_cycle">while cycle:</string>
+    <string name="do_while_cycle">do-while cycle:</string>
+    <string name="data_class">Data class</string>
+    <string name="copy_data_class">Copy data class</string>
+    <string name="show_copy">show copy</string>
+    <string name="foreach">.foreach</string>
+    <string name="repeat">repeat</string>
+    <string name="_for">for</string>
+    <string name="_while">while</string>
+    <string name="do_while">do-while</string>
+    <string name="data_class_fields">Data Class Fields</string>
+    <string name="copy_data_class_fields">Copy Data Class Fields</string>
 </resources>

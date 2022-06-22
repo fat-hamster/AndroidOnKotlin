@@ -6,13 +6,257 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dataClassTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dataClassCopyTextView"
+        android:layout_marginTop="8dp"
+        android:text="@string/data_class_fields" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dataClassCopyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/dataClassTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="@string/copy_data_class_fields" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dataClassFieldOneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/dataClassTextView"
+        app:layout_constraintTop_toBottomOf="@id/dataClassTextView"
+        android:layout_marginTop="16dp"
+        tools:text="Data Class Fields" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dataClassCopyFieldOneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dataClassCopyTextView"
+        app:layout_constraintStart_toStartOf="@+id/dataClassCopyTextView"
+        android:layout_marginTop="16dp"
+        tools:text="Data Class Fields" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dataClassFieldTwoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dataClassFieldOneTextView"
+        app:layout_constraintStart_toStartOf="@+id/dataClassTextView"
+        android:layout_marginTop="16dp"
+        tools:text="Data Class Fields" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dataClassCopyFieldTwoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/dataClassCopyFieldOneTextView"
+        app:layout_constraintStart_toStartOf="@+id/dataClassCopyTextView"
+        android:layout_marginTop="16dp"
+        tools:text="Data Class Fields" />
+
+    <View
+        android:id="@+id/hLine1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dataClassFieldTwoTextView"
+        android:layout_marginTop="20dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/foreachTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/hLine1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/foreach_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/foreachCycleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/hLine1"
+        app:layout_constraintStart_toEndOf="@id/foreachTitleTextView"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        tools:text="foreach_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/repeatTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/foreachTitleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/repeat_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/repeatCycleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/foreachCycleTextView"
+        app:layout_constraintStart_toStartOf="@id/foreachCycleTextView"
+        android:layout_marginTop="16dp"
+        tools:text="foreach_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/forTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/repeatTitleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/for_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/forCycleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/repeatCycleTextView"
+        app:layout_constraintStart_toStartOf="@id/repeatCycleTextView"
+        android:layout_marginTop="16dp"
+        tools:text="for_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/whileTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/forTitleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/while_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/whileCycleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/forCycleTextView"
+        app:layout_constraintStart_toStartOf="@id/forCycleTextView"
+        android:layout_marginTop="16dp"
+        tools:text="while_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/doWhileTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/whileTitleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/do_while_cycle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/doWhileCycleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/whileCycleTextView"
+        app:layout_constraintStart_toStartOf="@id/whileCycleTextView"
+        android:layout_marginTop="16dp"
+        tools:text="do-while_cycle" />
+
+    <View
+        android:id="@+id/hLine2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/doWhileTitleTextView"
+        android:layout_marginTop="20dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/showDataClassFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hLine2"
+        app:layout_constraintEnd_toStartOf="@id/showCopyDataClassFieldButton"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/data_class" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/showCopyDataClassFieldButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/show_copy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/showDataClassFieldButton"
+        app:layout_constraintTop_toBottomOf="@id/hLine2" />
+
+    <View
+        android:id="@+id/hLine3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/showDataClassFieldButton"
+        android:layout_marginTop="20dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/foreachButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hLine3"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/foreach" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/repeatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/foreachButton"
+        app:layout_constraintTop_toBottomOf="@id/hLine3"
+        android:layout_marginTop="8dp"
+        android:text="@string/repeat" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/forButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/repeatButton"
+        app:layout_constraintTop_toBottomOf="@id/hLine3"
+        android:layout_marginTop="8dp"
+        android:text="@string/_for" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/whileButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/forButton"
+        app:layout_constraintTop_toBottomOf="@id/hLine3"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/_while" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/doWhileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/foreachButton"
+        android:layout_marginTop="8dp"
+        android:text="@string/do_while" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
