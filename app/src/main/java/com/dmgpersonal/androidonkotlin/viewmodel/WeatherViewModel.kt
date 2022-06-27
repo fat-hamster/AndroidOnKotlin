@@ -16,10 +16,14 @@ class WeatherViewModel(
     fun getWeatherFromRemoteServer() = getDataFromLocalSource() // TODO: исправить!
 
     private fun getDataFromLocalSource() {
+        val rnd = (0..10).random()
         Thread {
             liveData.postValue(AppState.Loading)
             sleep(2000)
-            liveData.postValue(AppState.Success(repositoryImpl.getWeatherFromLocalSource()))
+            when(rnd) {
+                in 0..7 -> liveData.postValue(AppState.Success(repositoryImpl.getWeatherFromLocalSource()))
+                else -> liveData.postValue(AppState.Error(Throwable()))
+            }
         }.start()
     }
 }
