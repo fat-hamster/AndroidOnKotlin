@@ -5,16 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.lang.Thread.sleep
 
-class WeatherViewModel(private val liveData: MutableLiveData<AppState> = MutableLiveData()): ViewModel(){
+class WeatherViewModel(
+    private val liveData: MutableLiveData<AppState> = MutableLiveData(),
+    private val repositoryImpl: Repository = RepositoryImpl()
+): ViewModel() {
 
     fun getLiveData() = liveData
-    fun getWeather() = getDataFromLocalSource()
+    fun getWeatherFromLocalSource() = getDataFromLocalSource()
+    fun getWeatherFromRemoteServer() = getDataFromLocalSource() // TODO: исправить!
 
     private fun getDataFromLocalSource() {
         Thread {
             liveData.postValue(AppState.Loading)
             sleep(2000)
-            liveData.postValue(AppState.Success(AppState.Success(Any())))
+            liveData.postValue(AppState.Success(repositoryImpl.getWeatherFromLocalSource()))
         }.start()
     }
 }

@@ -35,7 +35,7 @@ class WeatherFragment : Fragment() {
         viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
         val observer = Observer<AppState> { renderData(it) }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
-        viewModel.getWeather()
+        viewModel.getWeatherFromLocalSource()
     }
 
     private fun renderData(appState: AppState) {
@@ -43,7 +43,7 @@ class WeatherFragment : Fragment() {
             is AppState.Success -> {
                 val weatherData = appState.weatherData
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(requireView(), "Success", Snackbar.LENGTH_LONG).show()
+                setData(weatherData)
             }
 
             is AppState.Loading -> {
@@ -53,9 +53,22 @@ class WeatherFragment : Fragment() {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar.make(requireView(), "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.getWeather() }
+                    .setAction("Reload") { viewModel.getWeatherFromLocalSource() }
                     .show()
             }
+        }
+    }
+
+    private fun setData(weatherData: Weather) {
+        binding.apply {
+            cityName.text = weatherData.city.name
+            cityCoordinates.text = String.format(
+                getString(R.string.city_coordinates),
+                weatherData.city.lat.toString(),
+                weatherData.city.lon.toString()
+            )
+            temperatureValue.text = weatherData.temperature.toString()
+            feelsLikeValue.text = weatherData.feelsLike.toString()
         }
     }
 
