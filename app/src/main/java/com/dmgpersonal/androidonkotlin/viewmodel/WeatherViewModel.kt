@@ -1,8 +1,9 @@
-package com.dmgpersonal.androidonkotlin
+package com.dmgpersonal.androidonkotlin.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dmgpersonal.androidonkotlin.model.Repository
+import com.dmgpersonal.androidonkotlin.model.RepositoryImpl
 import java.lang.Thread.sleep
 
 class WeatherViewModel(

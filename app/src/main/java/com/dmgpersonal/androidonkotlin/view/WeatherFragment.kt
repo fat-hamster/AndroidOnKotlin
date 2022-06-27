@@ -1,14 +1,17 @@
-package com.dmgpersonal.androidonkotlin
+package com.dmgpersonal.androidonkotlin.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dmgpersonal.androidonkotlin.R
+import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.databinding.FragmentWeatherBinding
+import com.dmgpersonal.androidonkotlin.viewmodel.AppState
+import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class WeatherFragment : Fragment() {

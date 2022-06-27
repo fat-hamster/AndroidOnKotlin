@@ -1,7 +1,8 @@
-package com.dmgpersonal.androidonkotlin
+package com.dmgpersonal.androidonkotlin.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dmgpersonal.androidonkotlin.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin
+package com.dmgpersonal.androidonkotlin.model
 
 interface Repository {
     fun getWeatherFromLocalSource() : Weather

@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin
+package com.dmgpersonal.androidonkotlin.model
 
 data class City(
     val name: String,

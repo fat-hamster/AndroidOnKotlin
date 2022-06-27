@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin
+package com.dmgpersonal.androidonkotlin.model
 
 class RepositoryImpl : Repository {
     override fun getWeatherFromLocalSource(): Weather {
