@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin.viewmodel
+package com.dmgpersonal.androidonkotlin.view.cities
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.model.Weather
 
-class CitiesFragmentAdapter :
+class CitiesFragmentAdapter(
+    private var onItemViewClickListener: CitiesListFragment.OnItemViewClickListener?
+) :
     RecyclerView.Adapter<CitiesFragmentAdapter.CitiesViewHolder>() {
 
     private var weatherData: List<Weather> = listOf()
@@ -35,12 +37,16 @@ class CitiesFragmentAdapter :
 
     override fun getItemCount(): Int { return weatherData.size }
 
+    fun removeListener() {
+        onItemViewClickListener = null
+    }
+
     inner class CitiesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(weather: Weather) {
             itemView.findViewById<TextView>(R.id.mainFragmentRecyclerItemTextView).text =
                 weather.city.name
             itemView.setOnClickListener {
-                Toast.makeText(itemView.context, weather.city.name, Toast.LENGTH_LONG).show()
+                onItemViewClickListener?.onItemViewClick(weather)
             }
         }
     }

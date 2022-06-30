@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin.view
+package com.dmgpersonal.androidonkotlin.view.cities
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.databinding.FragmentCitiesListBinding
 import com.dmgpersonal.androidonkotlin.model.Location.*
+import com.dmgpersonal.androidonkotlin.model.Weather
+import com.dmgpersonal.androidonkotlin.model.getDefaultCity
+import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetail
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
-import com.dmgpersonal.androidonkotlin.viewmodel.CitiesFragmentAdapter
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList
 import com.google.android.material.snackbar.Snackbar
 
@@ -20,7 +22,19 @@ class CitiesListFragment: Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: WeatherViewModelList
-    private val adapter = CitiesFragmentAdapter()
+    private val adapter = CitiesFragmentAdapter(object : OnItemViewClickListener {
+        override fun onItemViewClick(weather: Weather) {
+            val manager = activity?.supportFragmentManager
+            if(manager != null) {
+                val bundle = Bundle()
+                bundle.putParcelable(WeatherFragmentDetail.BUNDLE_EXTRA, weather)
+                manager.beginTransaction()
+                    .add(R.id.container, WeatherFragmentDetail.newInstance(bundle))
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+        }
+    })
     private var location = Russia
 
     companion object {
@@ -86,5 +100,14 @@ class CitiesListFragment: Fragment() {
         }
 
         location = !location
+    }
+
+    override fun onDestroy() {
+        adapter.removeListener()
+        super.onDestroy()
+    }
+
+    interface OnItemViewClickListener {
+        fun onItemViewClick(weather: Weather)
     }
 }

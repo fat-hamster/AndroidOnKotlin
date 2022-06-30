@@ -3,6 +3,7 @@ package com.dmgpersonal.androidonkotlin.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.dmgpersonal.androidonkotlin.R
+import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment
 
 class MainActivity : AppCompatActivity() {
 
