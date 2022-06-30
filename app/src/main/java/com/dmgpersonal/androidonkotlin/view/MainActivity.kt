@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         if(savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, WeatherFragmentDetail.newInstance())
+                .replace(R.id.container, CitiesListFragment.newInstance())
                 .commitNow()
         }
     }

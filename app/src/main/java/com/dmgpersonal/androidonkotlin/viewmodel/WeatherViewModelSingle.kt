@@ -8,7 +8,7 @@ import kotlin.random.Random
 
 class WeatherViewModelSingle(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryLocalSingle: RepositoryLocalSingle = RepositoryLocalSingleImpl(),
+    private val repository: Repository = RepositoryImpl(),
 ): ViewModel() {
 
     fun getLiveData() = liveData
@@ -19,7 +19,7 @@ class WeatherViewModelSingle(
             liveData.postValue(AppState.Loading)
             sleep(2000)
             when((0..10).random(Random(System.currentTimeMillis()))) {
-                in 0..7 -> liveData.postValue(AppState.SuccessSingle(repositoryLocalSingle.getWeatherFromLocalSource()))
+                in 0..7 -> liveData.postValue(AppState.SuccessSingle(repository.getWeatherFromServer()))
                 else -> liveData.postValue(AppState.Error(Throwable()))
             }
         }.start()

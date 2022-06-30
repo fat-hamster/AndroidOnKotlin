@@ -6,9 +6,13 @@ data class Weather(
     val feelsLike: Int = 0
 )
 
-sealed class Location {
-    object Russia: Location()
-    object World: Location()
+enum class Location {
+    Russia, World;
+
+    operator fun not(): Location {
+        return if(this == Russia) World
+        else Russia
+    }
 }
 
 fun getDefaultCity() = City("Москва", 55.755826, 37.617299900000035)
