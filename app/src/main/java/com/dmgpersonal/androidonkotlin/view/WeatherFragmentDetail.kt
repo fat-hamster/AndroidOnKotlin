@@ -8,45 +8,49 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.dmgpersonal.androidonkotlin.R
+import com.dmgpersonal.androidonkotlin.databinding.FragmentWeatherDetailBinding
 import com.dmgpersonal.androidonkotlin.model.Weather
-import com.dmgpersonal.androidonkotlin.databinding.FragmentWeatherBinding
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
-import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModel
+import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelSingle
 import com.google.android.material.snackbar.Snackbar
 
-class WeatherFragment : Fragment() {
+class WeatherFragmentDetail : Fragment() {
 
     companion object {
-        fun newInstance() = WeatherFragment()
+        fun newInstance() = WeatherFragmentDetail()
     }
 
-    private lateinit var viewModel : WeatherViewModel
-    private var _binding : FragmentWeatherBinding? = null
+    private lateinit var viewModel: WeatherViewModelSingle
+    private var _binding: FragmentWeatherDetailBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWeatherBinding.inflate(layoutInflater)
+        _binding = FragmentWeatherDetailBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
+        viewModel = ViewModelProvider(this)[WeatherViewModelSingle::class.java]
         val observer = Observer<AppState> { renderData(it) }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
         viewModel.getWeatherFromLocalSourceSingle()
     }
 
     private fun renderData(appState: AppState) {
-        when(appState) {
-            is AppState.Success -> {
+        when (appState) {
+            is AppState.SuccessSingle -> {
                 val weatherData = appState.weatherData
                 binding.loadingLayout.visibility = View.GONE
                 setData(weatherData)
+            }
+
+            is AppState.SuccessList -> {
+                // TODO: что-то придумать))))
             }
 
             is AppState.Loading -> {
