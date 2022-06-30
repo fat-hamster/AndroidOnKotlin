@@ -1,6 +1,5 @@
 package com.dmgpersonal.androidonkotlin.model
 
-interface Repository {
+fun interface RepositoryLocalSingle {
     fun getWeatherFromLocalSource() : Weather
-    fun getWeatherFromServer() : Weather
 }

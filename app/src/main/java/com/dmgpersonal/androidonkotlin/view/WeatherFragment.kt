@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 class WeatherFragment : Fragment() {
 
     companion object {
-        fun newInstance() : WeatherFragment = WeatherFragment()
+        fun newInstance() = WeatherFragment()
     }
 
     private lateinit var viewModel : WeatherViewModel
@@ -38,7 +38,7 @@ class WeatherFragment : Fragment() {
         viewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
         val observer = Observer<AppState> { renderData(it) }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
-        viewModel.getWeatherFromLocalSource()
+        viewModel.getWeatherFromLocalSourceSingle()
     }
 
     private fun renderData(appState: AppState) {
@@ -56,7 +56,7 @@ class WeatherFragment : Fragment() {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar.make(requireView(), "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.getWeatherFromLocalSource() }
+                    .setAction("Reload") { viewModel.getWeatherFromLocalSourceSingle() }
                     .show()
             }
         }
