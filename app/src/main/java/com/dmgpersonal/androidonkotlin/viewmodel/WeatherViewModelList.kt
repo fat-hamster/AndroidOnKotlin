@@ -8,7 +8,7 @@ import kotlin.random.Random
 
 class WeatherViewModelList(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val repositoryLocalList: Repository = RepositoryImpl()
+    private val repository: Repository = RepositoryImpl()
 ): ViewModel() {
 
     fun getLiveData() = liveData
@@ -21,10 +21,7 @@ class WeatherViewModelList(
             sleep(2000)
             when((0..10).random(Random(System.currentTimeMillis()))) {
                 in 0..7 -> liveData.postValue(
-                    if(location == Location.Russia)
-                        AppState.SuccessList(repositoryLocalList.getWeatherFromLocalSourceRus())
-                    else
-                        AppState.SuccessList(repositoryLocalList.getWeatherFromLocalSourceWorld()))
+                    AppState.SuccessList(repository.getWeather(false, location)))
                 else -> liveData.postValue(AppState.Error(Throwable()))
             }
         }.start()

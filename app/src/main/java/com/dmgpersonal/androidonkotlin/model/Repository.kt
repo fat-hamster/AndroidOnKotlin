@@ -1,22 +1,32 @@
 package com.dmgpersonal.androidonkotlin.model
 
-interface Repository {
-    fun getWeatherFromServer(): Weather
-    fun getWeatherFromLocalSourceRus(): List<Weather>
-    fun getWeatherFromLocalSourceWorld(): List<Weather>
+fun interface Repository {
+
+    fun getWeather(hasInternet: Boolean, location: Location): List<Weather>
 }
 
 class RepositoryImpl : Repository {
-    override fun getWeatherFromServer(): Weather {
-        return Weather()
+
+    // параметр hasInternet временный, потом проверятся будет тут и передавать его будет ненужно.
+    override fun getWeather(hasInternet: Boolean, location: Location): List<Weather> {
+        return if (hasInternet)
+            getWeatherFromServer(location)
+        else if (location == Location.World)
+            getWeatherFromLocalSourceWorld()
+        else
+            getWeatherFromLocalSourceRus()
     }
 
-    override fun getWeatherFromLocalSourceRus(): List<Weather> {
+    // Ответ от сервера в любом случе будет списком
+    private fun getWeatherFromServer(location: Location): List<Weather> {
+        return listOf(Weather())
+    }
+
+    private fun getWeatherFromLocalSourceRus(): List<Weather> {
         return getRussianCities()
     }
 
-    override fun getWeatherFromLocalSourceWorld(): List<Weather> {
+    private fun getWeatherFromLocalSourceWorld(): List<Weather> {
         return getWorldCities()
     }
-
 }
