@@ -80,21 +80,20 @@ class CitiesListFragment : Fragment() {
 
     private fun renderData(appState: AppState) = when (appState) {
         is AppState.Success -> {
-            binding.citiesFragmentLoadingLayout.visibility = View.GONE
             adapter.setWeather(appState.weatherData)
         }
-
-        is AppState.Loading -> binding.citiesFragmentLoadingLayout.visibility = View.VISIBLE
-
         is AppState.Error -> {
             with(binding) {
-                citiesFragmentLoadingLayout.visibility = View.GONE
                 citiesFragmentRootLayout.showSnackBar(
                     getString(R.string.error),
                     getString(R.string.reload),
                     { viewModel.getWeather(location) })
             }
         }
+        else -> {}
+    }.also {
+        if (appState == AppState.Loading) binding.citiesFragmentLoadingLayout.visibility = View.VISIBLE
+        else binding.citiesFragmentLoadingLayout.visibility = View.GONE
     }
 
     private fun changeDataSet() {
