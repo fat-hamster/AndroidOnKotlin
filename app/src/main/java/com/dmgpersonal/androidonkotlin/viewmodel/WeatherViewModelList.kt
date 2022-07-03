@@ -12,8 +12,8 @@ class WeatherViewModelList(
 ): ViewModel() {
 
     fun getLiveData() = liveData
-    fun getWeatherFromLocalSourceRus() = getDataFromLocalSourceList(Location.Russia)
-    fun getWeatherFromLocalSourceWorld() = getDataFromLocalSourceList(Location.World)
+
+    fun getWeather(location: Location) = getDataFromLocalSourceList(location)
 
     private fun getDataFromLocalSourceList(location: Location) {
         Thread {
@@ -21,7 +21,7 @@ class WeatherViewModelList(
             sleep(2000)
             when((0..10).random(Random(System.currentTimeMillis()))) {
                 in 0..7 -> liveData.postValue(
-                    AppState.SuccessList(repository.getWeather(false, location)))
+                    AppState.Success(repository.getWeather(false, location)))
                 else -> liveData.postValue(AppState.Error(Throwable()))
             }
         }.start()
