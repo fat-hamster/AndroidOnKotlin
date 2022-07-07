@@ -19,7 +19,7 @@ enum class Location {
     }
 }
 
-fun getDefaultCity() = City("Москва", 55.755826, 37.617299900000035)
+fun getDefaultCity() = City("Пенза", 53.2007, 45.0046)
 
 fun getWorldCities() = listOf(
         Weather(City("Лондон", 51.5085300, -0.1257400), 1, 2),
@@ -42,6 +42,7 @@ fun getRussianCities() = listOf(
             City("Екатеринбург", 56.83892609999999, 60.60570250000001), 7,
             8
         ),
+        Weather(City("Пенза", 53.2007, 45.0046), 9, 10),
         Weather(City("Нижний Новгород", 56.2965039, 43.936059), 9, 10),
         Weather(City("Казань", 55.8304307, 49.06608060000008), 11, 12),
         Weather(City("Челябинск", 55.1644419, 61.4368432), 13, 14),
