@@ -35,7 +35,7 @@ fun getWorldCities() = listOf(
     )
 
 fun getRussianCities() = listOf(
-        Weather(City("Москва", 55.755826, 37.617299900000035), 1, 2),
+        Weather(City("Москва", 55.7522, 37.6156), 1, 2),
         Weather(City("Санкт-Петербург", 59.9342802, 30.335098600000038), 3, 3),
         Weather(City("Новосибирск", 55.00835259999999, 82.93573270000002), 5, 6),
         Weather(
