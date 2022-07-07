@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dmgpersonal.androidonkotlin.BuildConfig
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.RemoteRepository
 import com.dmgpersonal.androidonkotlin.model.RemoteRepositoryImpl
@@ -43,7 +44,7 @@ class WeatherDTOModel (
         try {
             connection = uri.openConnection() as HttpsURLConnection
             connection.readTimeout = 10000
-            connection.addRequestProperty("X-Yandex-API-Key", "64728275-aa0c-4635-9791-c1857df7ed35")
+            connection.addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
 
             Thread {
                 try {

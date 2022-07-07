@@ -64,7 +64,10 @@ class WeatherFragmentDetail : Fragment() {
             }
         }
         is AppState.Error -> {
-            // TODO: обработать ошибку
+            Snackbar
+                .make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Reload") { viewModel.getWeather(city) }
+                .show()
         }
         else -> {}
     }.also {
