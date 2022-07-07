@@ -33,11 +33,7 @@ class CitiesListFragment : Fragment() {
                     .add(R.id.container, WeatherFragmentDetail.newInstance(
                         // а здесь как раз apply, по тем же причинам, что и run
                         Bundle().apply {
-                            putParcelable(
-                                WeatherFragmentDetail.BUNDLE_EXTRA,
-                                weather
-                            )
-                        }
+                            putParcelable(WeatherFragmentDetail.BUNDLE_EXTRA, weather)}
                     ))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
@@ -56,9 +52,7 @@ class CitiesListFragment : Fragment() {
         actionText: String,
         action: (View) -> Unit,
         length: Int = Snackbar.LENGTH_INDEFINITE
-    ) {
-        Snackbar.make(this, text, length).setAction(actionText, action).show()
-    }
+    ) { Snackbar.make(this, text, length).setAction(actionText, action).show() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
