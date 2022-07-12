@@ -1,7 +1,7 @@
 package com.dmgpersonal.androidonkotlin.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment
 
