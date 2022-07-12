@@ -11,7 +11,7 @@ import com.dmgpersonal.androidonkotlin.databinding.FragmentCitiesListBinding
 import com.dmgpersonal.androidonkotlin.model.Location.Russia
 import com.dmgpersonal.androidonkotlin.model.Location.World
 import com.dmgpersonal.androidonkotlin.model.Weather
-import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetail
+import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList
 import com.google.android.material.snackbar.Snackbar
@@ -27,13 +27,12 @@ class CitiesListFragment : Fragment() {
 
     private val adapter = CitiesFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemViewClick(weather: Weather) {
-            activity?.run { // run - название подходит больше по смыслу, потому run, а не apply
+            activity?.run {
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.container, WeatherFragmentDetail.newInstance(
-                        // а здесь как раз apply, по тем же причинам, что и run
+                    .add(R.id.container, WeatherFragmentDetails.newInstance(
                         Bundle().apply {
-                            putParcelable(WeatherFragmentDetail.BUNDLE_EXTRA, weather)}
+                            putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, weather)}
                     ))
                     .addToBackStack("")
                     .commitAllowingStateLoss()

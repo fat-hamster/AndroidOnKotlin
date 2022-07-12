@@ -19,7 +19,8 @@ class CitiesFragmentAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun setWeather(data: List<Weather>) {
         weatherData = data
-        notifyDataSetChanged()
+        notifyDataSetChanged() // FIXME: исправить обновление на notifyItemChanged()
+                            // или notifyItemRangeChanged() разобраться с diffutils
     }
 
     override fun onCreateViewHolder(

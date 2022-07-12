@@ -6,23 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.databinding.FragmentWeatherDetailBinding
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
-import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherDTOModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_weather_detail.*
 
-class WeatherFragmentDetail : Fragment() {
+class WeatherFragmentDetails : Fragment() {
 
     companion object {
         const val BUNDLE_EXTRA = "weather"
 
-        fun newInstance(bundle: Bundle): WeatherFragmentDetail {
-            return WeatherFragmentDetail().apply { arguments = bundle }
+        fun newInstance(bundle: Bundle): WeatherFragmentDetails {
+            return WeatherFragmentDetails().apply { arguments = bundle }
         }
     }
 
