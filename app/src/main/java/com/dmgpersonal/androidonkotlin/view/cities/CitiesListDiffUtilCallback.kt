@@ -3,7 +3,7 @@ package com.dmgpersonal.androidonkotlin.view.cities
 import androidx.recyclerview.widget.DiffUtil
 import com.dmgpersonal.androidonkotlin.model.Weather
 
-class CityListDiffUtilCallback(private val oldList: List<Weather>, private val newList: List<Weather>): DiffUtil.Callback() {
+class CitiesListDiffUtilCallback(private val oldList: List<Weather>, private val newList: List<Weather>): DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size

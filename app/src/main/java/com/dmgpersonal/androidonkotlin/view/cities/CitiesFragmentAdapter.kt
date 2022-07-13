@@ -19,7 +19,7 @@ class CitiesFragmentAdapter(
     //@SuppressLint("NotifyDataSetChanged")
     fun setWeather(data: List<Weather>) {
 
-        val cityDiffUtil = CityListDiffUtilCallback(weatherData, data)
+        val cityDiffUtil = CitiesListDiffUtilCallback(weatherData, data)
         val result = DiffUtil.calculateDiff(cityDiffUtil)
 
         weatherData = data
