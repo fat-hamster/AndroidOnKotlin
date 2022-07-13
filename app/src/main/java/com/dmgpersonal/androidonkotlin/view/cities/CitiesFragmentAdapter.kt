@@ -1,6 +1,5 @@
 package com.dmgpersonal.androidonkotlin.view.cities
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,7 @@ class CitiesFragmentAdapter(
 
     private var weatherData: List<Weather> = listOf()
 
-    @SuppressLint("NotifyDataSetChanged")
+    //@SuppressLint("NotifyDataSetChanged")
     fun setWeather(data: List<Weather>) {
 
         val cityDiffUtil = CityListDiffUtilCallback(weatherData, data)
@@ -26,7 +25,6 @@ class CitiesFragmentAdapter(
         weatherData = data
         result.dispatchUpdatesTo(this)
         //notifyDataSetChanged() // FIXME: исправить обновление на notifyItemChanged()
-                            // или notifyItemRangeChanged() разобраться с diffutils
     }
 
     override fun onCreateViewHolder(
