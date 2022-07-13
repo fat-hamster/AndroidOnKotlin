@@ -9,10 +9,15 @@ class CityListDiffUtilCallback(private val oldList: List<Weather>, private val n
 
     override fun getNewListSize(): Int = newList.size
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldList[oldItemPosition] == newList[newItemPosition] // TODO: ?????????????
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].city.lat == newList[newItemPosition].city.lat &&
+                oldList[oldItemPosition].city.lon == newList[newItemPosition].city.lon
+    }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return false
+        return oldList[oldItemPosition].city.lat == newList[newItemPosition].city.lat &&
+                oldList[oldItemPosition].city.lon == newList[newItemPosition].city.lon &&
+                oldList[oldItemPosition].temperature == newList[newItemPosition].temperature &&
+                oldList[oldItemPosition].feelsLike == newList[newItemPosition].feelsLike
     }
 }

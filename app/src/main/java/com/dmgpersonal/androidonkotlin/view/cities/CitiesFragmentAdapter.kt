@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.model.Weather
@@ -18,9 +19,12 @@ class CitiesFragmentAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun setWeather(data: List<Weather>) {
+
+        val cityDiffUtil = CityListDiffUtilCallback(weatherData, data)
+        val result = DiffUtil.calculateDiff(cityDiffUtil)
+
         weatherData = data
-        notifyDataSetChanged() // FIXME: исправить обновление на notifyItemChanged()
-                            // или notifyItemRangeChanged() разобраться с diffutils
+        result.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(

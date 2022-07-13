@@ -12,7 +12,7 @@ fun getLines(reader: BufferedReader): String {
     return reader.lines().collect(Collectors.joining("\n"))
 }
 
-private fun isInternetAvailable(context: Context): Boolean {
+fun isInternetAvailable(context: Context): Boolean {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val networkCapabilities = connectivityManager.activeNetwork ?: return false
