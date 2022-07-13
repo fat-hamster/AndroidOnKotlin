@@ -2,10 +2,7 @@ package com.dmgpersonal.androidonkotlin.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.dmgpersonal.androidonkotlin.R
-import com.dmgpersonal.androidonkotlin.utils.ConnectionLiveData
-import com.dmgpersonal.androidonkotlin.utils.onAlertDialog
 import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment
 
 class MainActivity : AppCompatActivity() {
@@ -20,16 +17,16 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        val root = findViewById<ConstraintLayout>(R.id.rootLayout)
-        val connectionLiveData = ConnectionLiveData(root.context)
-        connectionLiveData.observe(this) { isConnected ->
-            isConnected?.let {
-                when (it) {
-                    true -> onAlertDialog(root, "Network is available")
-                    false -> onAlertDialog(root, "Network is not available")
-                }
-            }
-        }
+//        val root = findViewById<ConstraintLayout>(R.id.rootLayout)
+//        val connectionLiveData = ConnectionLiveData(root.context)
+//        connectionLiveData.observe(this) { isConnected ->
+//            isConnected?.let {
+//                when (it) {
+//                    true -> onAlertDialog(root, "Network is available")
+//                    false -> onAlertDialog(root, "Network is not available")
+//                }
+//            }
+//        }
     }
 
 }
