@@ -9,10 +9,13 @@ import com.dmgpersonal.androidonkotlin.BuildConfig
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_API_KEY
+import com.dmgpersonal.androidonkotlin.utils.YANDEX_LINK
 import com.dmgpersonal.androidonkotlin.utils.getLines
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import okhttp3.*
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.MalformedURLException
 import java.net.URL
@@ -29,14 +32,49 @@ class WeatherDTOModel(
 
     private fun getWeatherFromServer(city: City) {
         liveDataDTO.value = AppState.Loading
-        requestToServer(city)
+        //requestToServer(city)
+        okhttpRequestToServer(city)
+    }
+
+    private fun okhttpRequestToServer(city: City) {
+        val client = OkHttpClient()
+        val builder: Request.Builder = Request.Builder().apply {
+            header(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
+            url(YANDEX_LINK + "lat=${city.lat}&lon=${city.lon}")
+        }
+        val request: Request = builder.build()
+        val call: Call = client.newCall(request)
+        call.enqueue(object : Callback {
+            val handler: Handler = Handler()
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                val serverResponse: String? = response.body()?.string()
+                if (response.isSuccessful && serverResponse != null) {
+                    val weather: WeatherDTO = Gson().fromJson(serverResponse, WeatherDTO::class.java)
+                    Handler(Looper.getMainLooper()).post {
+                        liveDataDTO.postValue(AppState.SuccessFromServer(weather))
+                    }
+                } else {
+                    Handler(Looper.getMainLooper()).post {
+                        // не нравится мне эта строка, и студии не нравится ))
+                        liveDataDTO.postValue(AppState.Error(throw Exception("unable get weather")))
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                Handler(Looper.getMainLooper()).post {
+                    liveDataDTO.postValue(AppState.Error(e))
+                }
+            }
+        })
     }
 
     private fun requestToServer(city: City) {
         var uri: URL? = null
         try {
             uri =
-                URL("https://api.weather.yandex.ru/v2/informers?lat=${city.lat}&lon=${city.lon}")
+                URL("${YANDEX_LINK}lat=${city.lat}&lon=${city.lon}")
         } catch (e: MalformedURLException) {
             liveDataDTO.value = AppState.Error(e)
             Log.e("@@@", "Fail URI", e)
