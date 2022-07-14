@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.dmgpersonal.androidonkotlin.BuildConfig
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
+import com.dmgpersonal.androidonkotlin.repository.DetailsRepositoryImpl
+import com.dmgpersonal.androidonkotlin.repository.RemoteDataSource
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_API_KEY
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_LINK
 import com.dmgpersonal.androidonkotlin.utils.getLines
@@ -21,6 +23,10 @@ import java.net.MalformedURLException
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+private const val SERVER_ERROR = "Ошибка сервера"
+private const val REQUEST_ERROR = "Ошибка запроса на сервер"
+private const val CORRUPTED_DATA = "Неполные данные"
+
 class WeatherDTOModel(
     private val liveDataDTO: MutableLiveData<AppState> = MutableLiveData(),
 ) : ViewModel() {
@@ -33,7 +39,40 @@ class WeatherDTOModel(
     private fun getWeatherFromServer(city: City) {
         liveDataDTO.value = AppState.Loading
         //requestToServer(city)
-        okhttpRequestToServer(city)
+        //okhttpRequestToServer(city)
+        val detailsRepositoryImpl = DetailsRepositoryImpl(RemoteDataSource())
+        detailsRepositoryImpl.getWeatherDetailsFromServer(city.lat, city.lon, callBack)
+    }
+
+    private val callBack = object : retrofit2.Callback<WeatherDTO> {
+        override fun onResponse(
+            call: retrofit2.Call<WeatherDTO>,
+            response: retrofit2.Response<WeatherDTO>
+        ) {
+            val serverResponse: WeatherDTO? = response.body()
+
+            liveDataDTO.postValue(
+                if(response.isSuccessful && serverResponse != null) {
+                    checkResponse(serverResponse)
+                } else {
+                    AppState.Error(Throwable(SERVER_ERROR))
+                })
+        }
+
+        override fun onFailure(call: retrofit2.Call<WeatherDTO>, t: Throwable) {
+            liveDataDTO.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
+        }
+
+        private fun checkResponse(serverResponse: WeatherDTO) : AppState {
+            val fact = serverResponse.fact
+            return if (fact == null || fact.temp == null || fact.feelsLike == null ||
+                    fact.condition.isNullOrEmpty()) {
+                AppState.Error(Throwable(CORRUPTED_DATA))
+            } else {
+                //AppState.Success(convertDtoToModel(serverResponse))
+                AppState.SuccessFromServer(serverResponse)
+            }
+        }
     }
 
     private fun okhttpRequestToServer(city: City) {
@@ -45,12 +84,12 @@ class WeatherDTOModel(
         val request: Request = builder.build()
         val call: Call = client.newCall(request)
         call.enqueue(object : Callback {
-            val handler: Handler = Handler()
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
-                val serverResponse: String? = response.body()?.string()
+                val serverResponse: String? = response.body?.string()
                 if (response.isSuccessful && serverResponse != null) {
-                    val weather: WeatherDTO = Gson().fromJson(serverResponse, WeatherDTO::class.java)
+                    val weather: WeatherDTO =
+                        Gson().fromJson(serverResponse, WeatherDTO::class.java)
                     Handler(Looper.getMainLooper()).post {
                         liveDataDTO.postValue(AppState.SuccessFromServer(weather))
                     }

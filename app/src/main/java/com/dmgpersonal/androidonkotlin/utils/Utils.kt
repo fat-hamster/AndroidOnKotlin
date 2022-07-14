@@ -14,6 +14,7 @@ import java.util.stream.Collectors
 
 const val YANDEX_API_KEY = "X-Yandex-API-Key"
 const val YANDEX_LINK = "https://api.weather.yandex.ru/v2/informers?"
+const val BASE_YANDEX_URL = "https://api.weather.yandex.ru/"
 
 fun getLines(reader: BufferedReader): String {
     return reader.lines().collect(Collectors.joining("\n"))

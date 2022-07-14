@@ -17,16 +17,5 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-//        val root = findViewById<ConstraintLayout>(R.id.rootLayout)
-//        val connectionLiveData = ConnectionLiveData(root.context)
-//        connectionLiveData.observe(this) { isConnected ->
-//            isConnected?.let {
-//                when (it) {
-//                    true -> onAlertDialog(root, "Network is available")
-//                    false -> onAlertDialog(root, "Network is not available")
-//                }
-//            }
-//        }
     }
-
 }
