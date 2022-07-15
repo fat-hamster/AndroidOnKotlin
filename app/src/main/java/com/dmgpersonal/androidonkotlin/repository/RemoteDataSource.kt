@@ -2,7 +2,7 @@ package com.dmgpersonal.androidonkotlin.repository
 
 import com.dmgpersonal.androidonkotlin.BuildConfig
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
-import com.dmgpersonal.androidonkotlin.utils.BASE_YANDEX_URL
+import com.dmgpersonal.androidonkotlin.utils.YANDEX_BASE_URL
 import com.google.gson.GsonBuilder
 import retrofit2.Callback
 import retrofit2.Retrofit
@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RemoteDataSource {
     private val weatherApi = Retrofit.Builder()
-        .baseUrl(BASE_YANDEX_URL)
+        .baseUrl(YANDEX_BASE_URL)
         .addConverterFactory(
             GsonConverterFactory.create(
                 GsonBuilder().setLenient().create()

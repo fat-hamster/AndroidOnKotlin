@@ -5,6 +5,8 @@ fun interface Repository {
     fun getWeather(hasInternet: Boolean, location: Location): List<Weather>
 }
 
+
+
 class RepositoryImpl : Repository {
 
     override fun getWeather(
