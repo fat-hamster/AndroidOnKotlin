@@ -1,5 +1,7 @@
 package com.dmgpersonal.androidonkotlin.view.cities
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import com.dmgpersonal.androidonkotlin.databinding.FragmentCitiesListBinding
 import com.dmgpersonal.androidonkotlin.model.Location.Russia
 import com.dmgpersonal.androidonkotlin.model.Location.World
 import com.dmgpersonal.androidonkotlin.model.Weather
+import com.dmgpersonal.androidonkotlin.utils.SP_REGION_SETTINGS
 import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList
@@ -20,6 +23,8 @@ class CitiesListFragment : Fragment() {
 
     private var _binding: FragmentCitiesListBinding? = null
     private val binding get() = _binding!!
+    private var sharedPreferences: SharedPreferences? = null
+    private var spState = true
 
     private val viewModel: WeatherViewModelList by lazy {
         ViewModelProvider(this)[WeatherViewModelList::class.java]
@@ -32,7 +37,8 @@ class CitiesListFragment : Fragment() {
                     .beginTransaction()
                     .add(R.id.container, WeatherFragmentDetails.newInstance(
                         Bundle().apply {
-                            putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, weather)}
+                            putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, weather)
+                        }
                     ))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
@@ -51,14 +57,29 @@ class CitiesListFragment : Fragment() {
         actionText: String,
         action: (View) -> Unit,
         length: Int = Snackbar.LENGTH_INDEFINITE
-    ) { Snackbar.make(this, text, length).setAction(actionText, action).show() }
+    ) {
+        Snackbar.make(this, text, length).setAction(actionText, action).show()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        sharedPreferences = context?.getSharedPreferences(SP_REGION_SETTINGS, Context.MODE_PRIVATE)
+        location = when(sharedPreferences?.getBoolean(SP_REGION_SETTINGS, true)) {
+            true -> Russia
+            false -> World
+            else -> Russia
+        }
+
         _binding = FragmentCitiesListBinding.inflate(inflater, container, false)
+
+        when (location) {
+            Russia -> binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
+            World -> binding.mainFragmentFAB.setImageResource(R.drawable.ic_world)
+        }
+
         return binding.root
     }
 
@@ -85,7 +106,8 @@ class CitiesListFragment : Fragment() {
         }
         else -> {}
     }.also {
-        if (appState == AppState.Loading) binding.citiesFragmentLoadingLayout.visibility = View.VISIBLE
+        if (appState == AppState.Loading) binding.citiesFragmentLoadingLayout.visibility =
+            View.VISIBLE
         else binding.citiesFragmentLoadingLayout.visibility = View.GONE
     }
 
@@ -96,7 +118,16 @@ class CitiesListFragment : Fragment() {
             Russia -> binding.mainFragmentFAB.setImageResource(R.drawable.ic_russia)
             World -> binding.mainFragmentFAB.setImageResource(R.drawable.ic_world)
         }
+
+        sharedPreferences?.run {
+            edit()
+                .putBoolean(SP_REGION_SETTINGS, when(location) {
+                    Russia -> true
+                    World -> false })
+                .commit()
+        }
     }
+
 
     override fun onDestroy() {
         _binding = null
