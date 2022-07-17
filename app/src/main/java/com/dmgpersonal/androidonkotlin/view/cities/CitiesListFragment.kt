@@ -13,6 +13,7 @@ import com.dmgpersonal.androidonkotlin.databinding.FragmentCitiesListBinding
 import com.dmgpersonal.androidonkotlin.model.Location.Russia
 import com.dmgpersonal.androidonkotlin.model.Location.World
 import com.dmgpersonal.androidonkotlin.model.Weather
+import com.dmgpersonal.androidonkotlin.utils.SP_KEY_LOCATION
 import com.dmgpersonal.androidonkotlin.utils.SP_REGION_SETTINGS
 import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
@@ -24,7 +25,7 @@ class CitiesListFragment : Fragment() {
     private var _binding: FragmentCitiesListBinding? = null
     private val binding get() = _binding!!
     private var sharedPreferences: SharedPreferences? = null
-    private var spState = true
+    private var location = Russia // Временное решение, потом локацию будем получать от Android
 
     private val viewModel: WeatherViewModelList by lazy {
         ViewModelProvider(this)[WeatherViewModelList::class.java]
@@ -46,8 +47,6 @@ class CitiesListFragment : Fragment() {
         }
     })
 
-    private var location = Russia // Временное решение, потом локацию будем получать от Android
-
     companion object {
         fun newInstance() = CitiesListFragment()
     }
@@ -67,7 +66,7 @@ class CitiesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         sharedPreferences = context?.getSharedPreferences(SP_REGION_SETTINGS, Context.MODE_PRIVATE)
-        location = when(sharedPreferences?.getBoolean(SP_REGION_SETTINGS, true)) {
+        location = when(sharedPreferences?.getBoolean(SP_KEY_LOCATION, true)) {
             true -> Russia
             false -> World
             else -> Russia
@@ -119,12 +118,12 @@ class CitiesListFragment : Fragment() {
             World -> binding.mainFragmentFAB.setImageResource(R.drawable.ic_world)
         }
 
-        sharedPreferences?.run {
+        sharedPreferences?.apply {
             edit()
-                .putBoolean(SP_REGION_SETTINGS, when(location) {
+                .putBoolean(SP_KEY_LOCATION, when(location) {
                     Russia -> true
                     World -> false })
-                .commit()
+                .apply()
         }
     }
 

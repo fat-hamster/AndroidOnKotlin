@@ -1,6 +1,10 @@
 package com.dmgpersonal.androidonkotlin.view.details
 
+import android.location.Geocoder
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +22,7 @@ import com.dmgpersonal.androidonkotlin.utils.YANDEX_WEATHER_ICON
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherDTOModel
 import com.google.android.material.snackbar.Snackbar
+import java.io.IOException
 
 class WeatherFragmentDetails : Fragment() {
 
@@ -56,11 +61,16 @@ class WeatherFragmentDetails : Fragment() {
         viewModel.getWeather(city)
     }
 
-    @Suppress("IMPLICIT_CAST_TO_ANY")
+    //@Suppress("IMPLICIT_CAST_TO_ANY")
     private fun renderData(appState: AppState) = when (appState) {
         is AppState.SuccessFromServer -> {
             with(binding) {
-                cityName.text = city.name
+                Thread {
+                    appState.weatherDTO.info.apply {
+                        Handler(Looper.getMainLooper()).post { cityName.text = getAddress(lat, lon) }
+                    }
+                }.start()
+
                 appState.weatherDTO.fact.let {
                     temperatureValue.text = it.temp.toString()
                     feelsLikeValue.text = it.feelsLike.toString()
@@ -96,6 +106,20 @@ class WeatherFragmentDetails : Fragment() {
             .build()
 
         imageLoader.enqueue(request)
+    }
+
+    private fun getAddress(lat: Double, lng: Double): String {
+        val geocoder = Geocoder(context, resources.configuration.locales.get(0))
+        var currentLocation: String
+        try {
+            val list = geocoder.getFromLocation(lat, lng, 1)
+            currentLocation = list[0].locality//getAddressLine(0)
+        } catch (e: IOException) {
+            currentLocation = "Unknown"
+            Log.d("@@@", e.toString())
+        }
+
+        return currentLocation
     }
 
 

@@ -2,6 +2,7 @@ package com.dmgpersonal.androidonkotlin.utils
 
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE
+import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -9,12 +10,14 @@ import android.net.NetworkInfo
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
+import com.dmgpersonal.androidonkotlin.MyApp
 import java.io.BufferedReader
 import java.util.stream.Collectors
 
 fun getLines(reader: BufferedReader): String {
     return reader.lines().collect(Collectors.joining("\n"))
 }
+
 
 fun isInternetAvailable(context: Context): Boolean {
     val connectivityManager =
