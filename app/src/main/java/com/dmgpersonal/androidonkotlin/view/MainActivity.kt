@@ -29,8 +29,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.history_menu_item) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.container, HistoryListFragment.newInstance())
-                .commitNow()
+                .replace(R.id.container, HistoryListFragment.newInstance())
+                .addToBackStack("")
+                .commit()
             true
         } else {
             super.onOptionsItemSelected(item)

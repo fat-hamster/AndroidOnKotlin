@@ -34,13 +34,13 @@ class HistoryListFragment : Fragment() {
             activity?.run {
                 supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.container, WeatherFragmentDetails.newInstance(
+                    .replace(R.id.container, WeatherFragmentDetails.newInstance(
                         Bundle().apply {
                             putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, weather)
                         }
                     ))
                     .addToBackStack("")
-                    .commitAllowingStateLoss()
+                    .commit()
             }
         }
     })
@@ -80,7 +80,7 @@ class HistoryListFragment : Fragment() {
             adapter.setWeather(appState.weather)
         }
         is AppStateRoom.Error -> {
-            //Log.d("@@@", "Что-то пошло не так в выводе истории: ${appState.error}")
+
         }
         else -> {}
     }.also {
