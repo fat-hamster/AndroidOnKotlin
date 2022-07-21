@@ -1,23 +1,16 @@
 package com.dmgpersonal.androidonkotlin.view.history
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dmgpersonal.androidonkotlin.R
-import com.dmgpersonal.androidonkotlin.databinding.FragmentCitiesListBinding
 import com.dmgpersonal.androidonkotlin.databinding.FragmentHistoryListBinding
-import com.dmgpersonal.androidonkotlin.model.Location.Russia
-import com.dmgpersonal.androidonkotlin.model.Location.World
 import com.dmgpersonal.androidonkotlin.model.Weather
-import com.dmgpersonal.androidonkotlin.utils.SP_KEY_LOCATION
-import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
 import com.dmgpersonal.androidonkotlin.viewmodel.AppStateRoom
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherHistoryModelFromRoom
-import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModelFromRoom
 import com.google.android.material.snackbar.Snackbar
 
 class HistoryListFragment : Fragment() {

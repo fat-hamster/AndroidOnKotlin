@@ -1,10 +1,8 @@
 package com.dmgpersonal.androidonkotlin.model.repository
 
 import com.dmgpersonal.androidonkotlin.MyApp
-import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.room.WeatherDatabase
-import com.dmgpersonal.androidonkotlin.model.room.WeatherEntity
 import com.dmgpersonal.androidonkotlin.utils.convertEntityToWeather
 import com.dmgpersonal.androidonkotlin.utils.convertWeatherToEntity
 

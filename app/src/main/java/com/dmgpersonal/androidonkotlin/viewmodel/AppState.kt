@@ -1,7 +1,6 @@
 package com.dmgpersonal.androidonkotlin.viewmodel
 
 import com.dmgpersonal.androidonkotlin.model.Weather
-import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
 
 sealed class AppState {
     data class Success(val weather: Weather) : AppState()

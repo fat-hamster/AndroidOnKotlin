@@ -18,11 +18,9 @@ import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_WEATHER_ICON
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
-import com.dmgpersonal.androidonkotlin.viewmodel.AppStateRoom
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModel
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModelFromRoom
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_weather_detail.*
 
 class WeatherFragmentDetails : Fragment() {
 
@@ -110,10 +108,6 @@ class WeatherFragmentDetails : Fragment() {
         }
         is AppState.Error -> {
             viewModelFromRoom.getWeather(city)
-//            Snackbar
-//                .make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
-//                .setAction("Reload") { viewModel.getWeather(city) }
-//                .show()
         }
         else -> {}
     }.also {

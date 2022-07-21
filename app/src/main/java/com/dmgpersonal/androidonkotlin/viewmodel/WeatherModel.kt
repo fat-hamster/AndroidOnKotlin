@@ -20,6 +20,10 @@ class WeatherModel(
 
     fun getWeather(city: City) = getWeatherFromServer(city)
 
+    fun setWeather(weather: Weather) {
+        liveData.postValue(AppState.Success(weather))
+    }
+
 
     private fun getWeatherFromServer(city: City) {
         liveData.value = AppState.Loading
