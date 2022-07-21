@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CitiesListFragment.newInstance())
+                .add(R.id.container, CitiesListFragment.newInstance())
                 .commitNow()
         }
     }

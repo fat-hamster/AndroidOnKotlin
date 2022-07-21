@@ -18,9 +18,11 @@ import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_WEATHER_ICON
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
+import com.dmgpersonal.androidonkotlin.viewmodel.AppStateRoom
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModel
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModelFromRoom
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_weather_detail.*
 
 class WeatherFragmentDetails : Fragment() {
 
@@ -70,10 +72,12 @@ class WeatherFragmentDetails : Fragment() {
     private fun dataFromRoom(appStateFromRoom: AppState) {
         when(appStateFromRoom) {
             is AppState.Success -> {
-                binding.cityName.text = appStateFromRoom.weather.city.name
-                binding.temperatureValue.text = appStateFromRoom.weather.temperature.toString()
-                binding.feelsLikeValue.text = appStateFromRoom.weather.feelsLike.toString()
-                binding.weatherIcon.loadSVG("$YANDEX_WEATHER_ICON${appStateFromRoom.weather.icon}.svg")
+                with(binding) {
+                    cityName.text = appStateFromRoom.weather.city.name
+                    temperatureValue.text = appStateFromRoom.weather.temperature.toString()
+                    feelsLikeValue.text = appStateFromRoom.weather.feelsLike.toString()
+                    weatherIcon.loadSVG("$YANDEX_WEATHER_ICON${appStateFromRoom.weather.icon}.svg")
+                }
             }
 
             is AppState.Error -> {

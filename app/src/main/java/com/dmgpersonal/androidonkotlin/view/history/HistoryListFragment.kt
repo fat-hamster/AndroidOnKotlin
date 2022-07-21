@@ -34,9 +34,9 @@ class HistoryListFragment : Fragment() {
             activity?.run {
                 supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.container, WeatherFragmentDetails.newInstance(
+                    .replace(R.id.container, HistoryFragmentDetails.newInstance(
                         Bundle().apply {
-                            putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, weather)
+                            putParcelable(HistoryFragmentDetails.BUNDLE_EXTRA, weather)
                         }
                     ))
                     .addToBackStack("")
