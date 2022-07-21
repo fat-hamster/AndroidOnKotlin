@@ -10,6 +10,7 @@ import com.dmgpersonal.androidonkotlin.model.repository.RemoteDataSource
 import com.dmgpersonal.androidonkotlin.model.repository.RetrofitRepositoryImpl
 import com.dmgpersonal.androidonkotlin.utils.REQUEST_ERROR
 import com.dmgpersonal.androidonkotlin.utils.SERVER_ERROR
+import com.dmgpersonal.androidonkotlin.utils.convertDtoToWeather
 
 class WeatherModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
@@ -45,15 +46,5 @@ class WeatherModel(
         override fun onFailure(call: retrofit2.Call<WeatherDTO>, t: Throwable) {
             liveData.postValue(AppState.Error(Throwable(t.message ?: REQUEST_ERROR)))
         }
-    }
-
-    private fun convertDtoToWeather(weatherDTO: WeatherDTO): Weather {
-        return Weather(
-            City(getAddress(weatherDTO.info.lat, weatherDTO.info.lon),
-                weatherDTO.info.lat, weatherDTO.info.lon),
-            temperature = weatherDTO.fact.temp,
-            feelsLike = weatherDTO.fact.feelsLike,
-            icon = weatherDTO.fact.icon
-        )
     }
 }

@@ -5,8 +5,10 @@ import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.room.WeatherDatabase
 import com.dmgpersonal.androidonkotlin.model.room.WeatherEntity
+import com.dmgpersonal.androidonkotlin.utils.convertEntityToWeather
+import com.dmgpersonal.androidonkotlin.utils.convertWeatherToEntity
 
-class RoomRepositoryImpl: RoomDetailsRepository, RoomInsertWeather {
+class RoomRepositoryImpl: RoomDetailsRepository, RoomInsertWeather, AllWeatherFromRoom {
     override fun getWeather(lat: Double, lon: Double, callback: ResponseCallback) {
         callback.onResponse(WeatherDatabase.invoke(MyApp.appContext)
             .weatherDao()
@@ -16,19 +18,13 @@ class RoomRepositoryImpl: RoomDetailsRepository, RoomInsertWeather {
     }
 
     override fun saveWeather(weather: Weather) {
-        WeatherDatabase.invoke(MyApp.appContext).weatherDao().insert(convertWeatherToEntity(weather))
+        Thread {
+            WeatherDatabase.invoke(MyApp.appContext).weatherDao()
+                .insert(convertWeatherToEntity(weather))
+        }.start()
     }
 
-    private fun convertWeatherToEntity(weather: Weather): WeatherEntity {
-        return weather.let {
-            WeatherEntity(0, it.city.name, it.city.lat, it.city.lon,
-                it.temperature, it.feelsLike, it.icon)
-        }
-    }
-
-    private fun convertEntityToWeather(entity: List<WeatherEntity>): List<Weather> {
-        return entity.map {
-            Weather(City(it.name, it.lat, it.lon), it.temperature, it.feelsLike, it.icon)
-        }
+    override fun getAllWeatherFromHistory(): List<Weather> {
+        return convertEntityToWeather(WeatherDatabase.invoke(MyApp.appContext).weatherDao().getAllWeather())
     }
 }

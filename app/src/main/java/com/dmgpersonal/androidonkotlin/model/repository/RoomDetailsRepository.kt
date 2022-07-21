@@ -10,6 +10,10 @@ interface RoomDetailsRepository {
     )
 }
 
+interface AllWeatherFromRoom {
+    fun getAllWeatherFromHistory(): List<Weather>
+}
+
 interface ResponseCallback {
     fun onResponse(weather: Weather)
     fun onFailure(e: Exception)

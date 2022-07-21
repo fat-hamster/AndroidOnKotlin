@@ -19,6 +19,7 @@ import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_WEATHER_ICON
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModel
+import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModelFromRoom
 import com.google.android.material.snackbar.Snackbar
 
 class WeatherFragmentDetails : Fragment() {
@@ -39,6 +40,10 @@ class WeatherFragmentDetails : Fragment() {
         ViewModelProvider(this)[WeatherModel::class.java]
     }
 
+    private val viewModelFromRoom: WeatherModelFromRoom by lazy {
+        ViewModelProvider(this)[WeatherModelFromRoom::class.java]
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +61,29 @@ class WeatherFragmentDetails : Fragment() {
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { appState -> renderData(appState) }
         viewModel.getWeather(city)
+
+        viewModelFromRoom.getLiveData().observe(viewLifecycleOwner) {
+                appStateFromRoom -> dataFromRoom(appStateFromRoom)
+        }
+    }
+
+    private fun dataFromRoom(appStateFromRoom: AppState) {
+        when(appStateFromRoom) {
+            is AppState.Success -> {
+                binding.cityName.text = appStateFromRoom.weather.city.name
+                binding.temperatureValue.text = appStateFromRoom.weather.temperature.toString()
+                binding.feelsLikeValue.text = appStateFromRoom.weather.feelsLike.toString()
+                binding.weatherIcon.loadSVG("$YANDEX_WEATHER_ICON${appStateFromRoom.weather.icon}.svg")
+            }
+
+            is AppState.Error -> {
+                Snackbar
+                .make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Reload") { viewModel.getWeather(city) }
+                .show()
+            }
+            else -> {}
+        }
     }
 
 
@@ -63,23 +91,25 @@ class WeatherFragmentDetails : Fragment() {
         is AppState.Success -> {
             with(binding) {
                 Thread {
-                    appState.weatherDTO.apply {
+                    appState.weather.apply {
                         Handler(Looper.getMainLooper()).post { cityName.text = city.name }
                     }
                 }.start()
 
-                appState.weatherDTO.let {
+                appState.weather.let {
                     temperatureValue.text = it.temperature.toString()
                     feelsLikeValue.text = it.feelsLike.toString()
                     weatherIcon.loadSVG("$YANDEX_WEATHER_ICON${it.icon}.svg")
                 }
             }
+            viewModelFromRoom.saveWeather(weather = appState.weather)
         }
         is AppState.Error -> {
-            Snackbar
-                .make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Reload") { viewModel.getWeather(city) }
-                .show()
+            viewModelFromRoom.getWeather(city)
+//            Snackbar
+//                .make(binding.root, "Error", Snackbar.LENGTH_INDEFINITE)
+//                .setAction("Reload") { viewModel.getWeather(city) }
+//                .show()
         }
         else -> {}
     }.also {
