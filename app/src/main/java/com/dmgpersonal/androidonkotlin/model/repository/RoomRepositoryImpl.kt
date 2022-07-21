@@ -1,13 +1,12 @@
 package com.dmgpersonal.androidonkotlin.model.repository
 
 import com.dmgpersonal.androidonkotlin.MyApp
-import com.dmgpersonal.androidonkotlin.model.dto.FactDTO
-import com.dmgpersonal.androidonkotlin.model.dto.InfoDTO
-import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
+import com.dmgpersonal.androidonkotlin.model.City
+import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.room.WeatherDatabase
 import com.dmgpersonal.androidonkotlin.model.room.WeatherEntity
 
-class RoomRepositoryImpl: RoomDetailsRepository {
+class RoomRepositoryImpl: RoomDetailsRepository, RoomInsertWeather {
     override fun getWeather(lat: Double, lon: Double, callback: ResponseCallback) {
         callback.onResponse(WeatherDatabase.invoke(MyApp.appContext)
             .weatherDao()
@@ -16,14 +15,20 @@ class RoomRepositoryImpl: RoomDetailsRepository {
         })
     }
 
-//    fun convertWeatherToModel(weatherDTO: WeatherDTO): WeatherEntity {
-//
-//    }
+    override fun saveWeather(weather: Weather) {
+        WeatherDatabase.invoke(MyApp.appContext).weatherDao().insert(convertWeatherToEntity(weather))
+    }
 
-    private fun convertEntityToWeather(entity: List<WeatherEntity>): List<WeatherDTO> {
+    private fun convertWeatherToEntity(weather: Weather): WeatherEntity {
+        return weather.let {
+            WeatherEntity(0, it.city.name, it.city.lat, it.city.lon,
+                it.temperature, it.feelsLike, it.icon)
+        }
+    }
+
+    private fun convertEntityToWeather(entity: List<WeatherEntity>): List<Weather> {
         return entity.map {
-            WeatherDTO(FactDTO(it.feelsLike, it.icon, it.temperature), InfoDTO(it.lat, it.lon)
-            )
+            Weather(City(it.name, it.lat, it.lon), it.temperature, it.feelsLike, it.icon)
         }
     }
 }

@@ -1,16 +1,16 @@
 package com.dmgpersonal.androidonkotlin.model.repository
 
-import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
+import com.dmgpersonal.androidonkotlin.model.Weather
 
 interface RoomDetailsRepository {
     fun getWeather(
         lat: Double,
         lon: Double,
-    callback: ResponseCallback
+        callback: ResponseCallback
     )
 }
 
 interface ResponseCallback {
-    fun onResponse(weatherDTO: WeatherDTO)
+    fun onResponse(weather: Weather)
     fun onFailure(e: Exception)
 }
