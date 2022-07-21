@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin.repository
+package com.dmgpersonal.androidonkotlin.model.repository
 
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_API_KEY

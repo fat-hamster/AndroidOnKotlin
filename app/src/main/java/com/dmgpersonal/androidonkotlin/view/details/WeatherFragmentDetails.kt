@@ -1,10 +1,8 @@
 package com.dmgpersonal.androidonkotlin.view.details
 
-import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +18,8 @@ import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.utils.YANDEX_WEATHER_ICON
 import com.dmgpersonal.androidonkotlin.viewmodel.AppState
-import com.dmgpersonal.androidonkotlin.viewmodel.WeatherDTOModel
+import com.dmgpersonal.androidonkotlin.viewmodel.WeatherModel
 import com.google.android.material.snackbar.Snackbar
-import java.io.IOException
 
 class WeatherFragmentDetails : Fragment() {
 
@@ -38,8 +35,8 @@ class WeatherFragmentDetails : Fragment() {
     private val binding get() = _binding!!
     private var city: City = Weather().city // default city
 
-    private val viewModel: WeatherDTOModel by lazy {
-        ViewModelProvider(this)[WeatherDTOModel::class.java]
+    private val viewModel: WeatherModel by lazy {
+        ViewModelProvider(this)[WeatherModel::class.java]
     }
 
     override fun onCreateView(
@@ -57,22 +54,22 @@ class WeatherFragmentDetails : Fragment() {
             city = weather.city
         }
 
-        viewModel.getLiveDataDTO().observe(viewLifecycleOwner) { appState -> renderData(appState) }
+        viewModel.getLiveData().observe(viewLifecycleOwner) { appState -> renderData(appState) }
         viewModel.getWeather(city)
     }
 
-    //@Suppress("IMPLICIT_CAST_TO_ANY")
+
     private fun renderData(appState: AppState) = when (appState) {
-        is AppState.SuccessFromServer -> {
+        is AppState.Success -> {
             with(binding) {
                 Thread {
-                    appState.weatherDTO.info.apply {
-                        Handler(Looper.getMainLooper()).post { cityName.text = getAddress(lat, lon) }
+                    appState.weatherDTO.apply {
+                        Handler(Looper.getMainLooper()).post { cityName.text = city.name }
                     }
                 }.start()
 
-                appState.weatherDTO.fact.let {
-                    temperatureValue.text = it.temp.toString()
+                appState.weatherDTO.let {
+                    temperatureValue.text = it.temperature.toString()
                     feelsLikeValue.text = it.feelsLike.toString()
                     weatherIcon.loadSVG("$YANDEX_WEATHER_ICON${it.icon}.svg")
                 }
@@ -97,7 +94,7 @@ class WeatherFragmentDetails : Fragment() {
             }
             .build()
 
-        val request = ImageRequest.Builder(this.context)
+        val request = ImageRequest.Builder(context)
             .placeholder(R.drawable.loading)
             .crossfade(true)
             .crossfade(500)
@@ -107,21 +104,6 @@ class WeatherFragmentDetails : Fragment() {
 
         imageLoader.enqueue(request)
     }
-
-    private fun getAddress(lat: Double, lng: Double): String {
-        val geocoder = Geocoder(context, resources.configuration.locales.get(0))
-        var currentLocation: String
-        try {
-            val list = geocoder.getFromLocation(lat, lng, 1)
-            currentLocation = list[0].locality//getAddressLine(0)
-        } catch (e: IOException) {
-            currentLocation = "Unknown"
-            Log.d("@@@", e.toString())
-        }
-
-        return currentLocation
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()

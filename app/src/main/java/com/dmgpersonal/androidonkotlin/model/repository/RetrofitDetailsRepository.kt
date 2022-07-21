@@ -1,9 +1,9 @@
-package com.dmgpersonal.androidonkotlin.repository
+package com.dmgpersonal.androidonkotlin.model.repository
 
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
 
-interface DetailsRepository {
-    fun getWeatherDetailsFromServer(
+interface RetrofitDetailsRepository {
+    fun getWeather(
         lat: Double,
         lon: Double,
         callback: retrofit2.Callback<WeatherDTO>

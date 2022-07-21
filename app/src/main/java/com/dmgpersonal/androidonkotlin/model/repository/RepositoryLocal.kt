@@ -1,25 +1,26 @@
-package com.dmgpersonal.androidonkotlin.model
+package com.dmgpersonal.androidonkotlin.model.repository
 
-fun interface Repository {
+import com.dmgpersonal.androidonkotlin.model.Location
+import com.dmgpersonal.androidonkotlin.model.Weather
+import com.dmgpersonal.androidonkotlin.model.getRussianCities
+import com.dmgpersonal.androidonkotlin.model.getWorldCities
 
+fun interface RepositoryWeatherFromLocal {
     fun getWeather(hasInternet: Boolean, location: Location): List<Weather>
 }
 
 
-
-class RepositoryImpl : Repository {
-
+class RepositoryLocalImpl : RepositoryWeatherFromLocal {
     override fun getWeather(
         hasInternet: Boolean,
-        location: Location): List<Weather> = when (hasInternet) {
+        location: Location
+    ): List<Weather> = when (hasInternet) {
             true -> getWeatherFromServer()
             else -> when (location) {
                 Location.World -> getWeatherFromLocalSourceWorld()
                 Location.Russia -> getWeatherFromLocalSourceRus()
             }}
 
-
-    // Ответ от сервера в любом случе будет списком
     private fun getWeatherFromServer(): List<Weather> = listOf(Weather())
 
     private fun getWeatherFromLocalSourceRus(): List<Weather> = getRussianCities()

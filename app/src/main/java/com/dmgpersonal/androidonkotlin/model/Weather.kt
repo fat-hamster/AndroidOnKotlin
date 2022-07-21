@@ -7,7 +7,8 @@ import kotlinx.android.parcel.Parcelize
 data class Weather(
     val city: City = getDefaultCity(),
     val temperature: Int = 0,
-    val feelsLike: Int = 0
+    val feelsLike: Int = 0,
+    val icon: String = ""
 ): Parcelable
 
 enum class Location {

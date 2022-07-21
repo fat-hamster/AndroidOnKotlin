@@ -16,7 +16,7 @@ import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.utils.SP_KEY_LOCATION
 import com.dmgpersonal.androidonkotlin.utils.SP_REGION_SETTINGS
 import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
-import com.dmgpersonal.androidonkotlin.viewmodel.AppState
+import com.dmgpersonal.androidonkotlin.viewmodel.AppStateLocal
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList
 import com.google.android.material.snackbar.Snackbar
 
@@ -91,11 +91,11 @@ class CitiesListFragment : Fragment() {
         viewModel.getWeather(location)
     }
 
-    private fun renderData(appState: AppState) = when (appState) {
-        is AppState.Success -> {
+    private fun renderData(appState: AppStateLocal) = when (appState) {
+        is AppStateLocal.Success -> {
             adapter.setWeather(appState.weatherData)
         }
-        is AppState.Error -> {
+        is AppStateLocal.Error -> {
             with(binding) {
                 citiesFragmentRootLayout.showSnackBar(
                     getString(R.string.error),
@@ -105,7 +105,7 @@ class CitiesListFragment : Fragment() {
         }
         else -> {}
     }.also {
-        if (appState == AppState.Loading) binding.citiesFragmentLoadingLayout.visibility =
+        if (appState == AppStateLocal.Loading) binding.citiesFragmentLoadingLayout.visibility =
             View.VISIBLE
         else binding.citiesFragmentLoadingLayout.visibility = View.GONE
     }

@@ -1,4 +1,4 @@
-package com.dmgpersonal.androidonkotlin.repository
+package com.dmgpersonal.androidonkotlin.model.repository
 
 import com.dmgpersonal.androidonkotlin.BuildConfig
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
@@ -17,6 +17,7 @@ class RemoteDataSource {
             )
         )
         .build().create(WeatherAPI::class.java)
+
     fun getWeatherDetails(lat: Double, lon: Double, callback:
     Callback<WeatherDTO>
     ) {
