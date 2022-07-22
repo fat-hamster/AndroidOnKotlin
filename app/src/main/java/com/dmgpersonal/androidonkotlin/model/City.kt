@@ -14,7 +14,7 @@ data class City(
     val lon: Double
 ) : Parcelable
 
-// От данной функции пока мало проку, но ближе к концу курса она обязательно понадобится! :)
+// FIXME: проверка permissions всегда перед использованием!!!!
 fun getAddress(lat: Double, lng: Double): String {
     val geocoder = Geocoder(MyApp.appContext, MyApp.appContext.resources.configuration.locales.get(0))
     var currentLocation: String
