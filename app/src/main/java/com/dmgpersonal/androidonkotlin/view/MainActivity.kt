@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.dmgpersonal.androidonkotlin.R
+import com.dmgpersonal.androidonkotlin.lesson9.ContactsFragment
 import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment
 import com.dmgpersonal.androidonkotlin.view.history.HistoryListFragment
 import com.dmgpersonal.androidonkotlin.view.map.MapsFragment
@@ -38,7 +39,14 @@ class MainActivity : AppCompatActivity() {
 
             R.id.map_menu_item -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MapsFragment())
+                    .replace(R.id.container, MapsFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+            }
+
+            R.id.contacts_menu_item -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, ContactsFragment.newInstance())
                     .addToBackStack("")
                     .commit()
             }
