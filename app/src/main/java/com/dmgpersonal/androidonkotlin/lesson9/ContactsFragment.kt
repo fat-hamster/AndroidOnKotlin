@@ -36,10 +36,11 @@ class ContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        checkPermission(Manifest.permission.READ_CONTACTS,
+        checkPermission(
+            Manifest.permission.READ_CONTACTS,
             "Доступ к контактам",
-            "Разрешение требуется для отображения контактов")
+            "Разрешение требуется для отображения контактов"
+        )
     }
 
     private fun checkPermission(permission: String, title: String, message: String) {
@@ -82,7 +83,6 @@ class ContactsFragment : Fragment() {
         requestPermissions(arrayOf(permission), REQUEST_CODE_READ_CONTACTS)
     }
 
-    @SuppressLint("Recycle", "Range")
     private fun getContacts() {
         val contextResolver = requireContext().contentResolver
         val cursorWithContacts: Cursor? = contextResolver.query(
@@ -97,13 +97,10 @@ class ContactsFragment : Fragment() {
             for (idx in 0 until contactsCursor.count) {
                 contactsCursor.moveToPosition(idx)
 
-                val contactName = contactsCursor.getString(
-                    contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-                )
-                val contactID = contactsCursor.getString(
-                    contactsCursor
-                        .getColumnIndex(ContactsContract.Contacts._ID)
-                )
+                val indexName = contactsCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                val contactName = contactsCursor.getString(indexName)
+                val indexID = contactsCursor.getColumnIndex(ContactsContract.Contacts._ID)
+                val contactID = contactsCursor.getString(indexID)
                 val contactNumber = getNumberFromID(contextResolver, contactID)
                 addView(contactName, contactNumber)
             }
@@ -111,7 +108,6 @@ class ContactsFragment : Fragment() {
         cursorWithContacts?.close()
     }
 
-    @SuppressLint("Recycle", "Range")
     private fun getNumberFromID(cr: ContentResolver, contactId: String): String {
         val phones = cr.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
@@ -120,8 +116,8 @@ class ContactsFragment : Fragment() {
         var number: String = "none"
         phones?.let { cursor ->
             while (cursor.moveToNext()) {
-                number =
-                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                number = cursor.getString(phoneIndex)
             }
         }
         return number
