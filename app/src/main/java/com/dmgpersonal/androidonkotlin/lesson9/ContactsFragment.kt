@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -38,38 +37,39 @@ class ContactsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkPermission()
+        checkPermission(Manifest.permission.READ_CONTACTS,
+            "Доступ к контактам",
+            "Разрешение требуется для отображения контактов")
     }
 
-    private fun checkPermission() {
+    private fun checkPermission(permission: String, title: String, message: String) {
         val permResult =
-            ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CONTACTS)
-        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
+            ContextCompat.checkSelfPermission(requireContext(), permission)
+        if (shouldShowRequestPermissionRationale(permission)) {
             AlertDialog.Builder(requireContext())
-                .setTitle("Доступ к контактам")
-                .setMessage("Разрешение требуется для отображения контактов")
+                .setTitle(title)
+                .setMessage(message)
                 .setPositiveButton("Предоставить доступ") { _, _ ->
-                    permissionRequest(Manifest.permission.READ_CONTACTS)
+                    permissionRequest(permission)
                 }
                 .setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
                 .create()
                 .show()
         } else if (permResult != PackageManager.PERMISSION_GRANTED) {
-            permissionRequest(Manifest.permission.READ_CONTACTS)
+            permissionRequest(permission)
         } else {
             getContacts()
         }
     }
 
-    private val REQUEST_CODE_READ_CONTACTS_NAME = 687
-    private val REQUEST_CODE_READ_CONTACTS_NUMBER = 688
+    private val REQUEST_CODE_READ_CONTACTS = 687
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE_READ_CONTACTS_NAME
+        if (requestCode == REQUEST_CODE_READ_CONTACTS
             && grantResults[permissions.indexOf(Manifest.permission.READ_CONTACTS)]
             == PackageManager.PERMISSION_GRANTED
         ) {
@@ -79,10 +79,10 @@ class ContactsFragment : Fragment() {
     }
 
     private fun permissionRequest(permission: String) {
-        requestPermissions(arrayOf(permission), REQUEST_CODE_READ_CONTACTS_NAME)
+        requestPermissions(arrayOf(permission), REQUEST_CODE_READ_CONTACTS)
     }
 
-    @SuppressLint("Recycle")
+    @SuppressLint("Recycle", "Range")
     private fun getContacts() {
         val contextResolver = requireContext().contentResolver
         val cursorWithContacts: Cursor? = contextResolver.query(
@@ -111,7 +111,7 @@ class ContactsFragment : Fragment() {
         cursorWithContacts?.close()
     }
 
-    @SuppressLint("Recycle")
+    @SuppressLint("Recycle", "Range")
     private fun getNumberFromID(cr: ContentResolver, contactId: String): String {
         val phones = cr.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,

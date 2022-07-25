@@ -1,5 +1,11 @@
 package com.dmgpersonal.androidonkotlin.utils
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
