@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.dmgpersonal.androidonkotlin.databinding.FragmentContactsBinding
+import com.dmgpersonal.androidonkotlin.utils.REQUEST_CODE_READ_CONTACTS
 
 class ContactsFragment : Fragment() {
 
@@ -62,8 +63,6 @@ class ContactsFragment : Fragment() {
             getContacts()
         }
     }
-
-    private val REQUEST_CODE_READ_CONTACTS = 687
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
