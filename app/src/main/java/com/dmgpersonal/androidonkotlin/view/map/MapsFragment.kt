@@ -17,9 +17,11 @@ import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.databinding.FragmentMapsBinding
 import com.dmgpersonal.androidonkotlin.model.getAddress
+import com.dmgpersonal.androidonkotlin.model.getCoordinates
 import com.dmgpersonal.androidonkotlin.model.getDefaultCity
 import com.dmgpersonal.androidonkotlin.utils.REQUEST_CODE_READ_CONTACTS
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -30,8 +32,10 @@ class MapsFragment : Fragment() {
     private var currentLocation = getDefaultCity()
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var map: GoogleMap
 
     private val callback = OnMapReadyCallback { googleMap ->
+        map = googleMap
         val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
         googleMap.addMarker(MarkerOptions()
             .position(currentPosition).title("Marker in ${currentLocation.name}"))
@@ -48,7 +52,7 @@ class MapsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
-
+        getCurrentLocation()
         return binding.root
     }
 
@@ -57,13 +61,21 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
-        getCurrentLocation()
+        //getCurrentLocation()
 
         binding.addressButton.setOnClickListener {
-            if (binding.addressEditText.text.isNullOrEmpty()) {
-
+            if (!binding.addressEditText.text.isNullOrEmpty()) {
+                currentLocation = getCoordinates(binding.addressEditText.text.toString())
+                setMarker()
             }
         }
+    }
+
+    private fun setMarker() {
+        val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
+        map.addMarker(MarkerOptions()
+            .position(currentPosition).title("Marker in ${currentLocation.name}"))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 12F))
     }
 
     /*************************************** Location ***************************************/
@@ -109,11 +121,12 @@ class MapsFragment : Fragment() {
                 getString(R.string.location_alert_request_text)
             )) {
             if (hasGps) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500,
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 500L,
                     0F, locationListener)
             } else {
                 locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 500,
+                    LocationManager.NETWORK_PROVIDER, 500L,
                     0F, locationListener)
             }
         }

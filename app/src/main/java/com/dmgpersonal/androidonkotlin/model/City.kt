@@ -1,9 +1,21 @@
 package com.dmgpersonal.androidonkotlin.model
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Parcelable
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.dmgpersonal.androidonkotlin.MyApp
+import com.dmgpersonal.androidonkotlin.R
+import com.dmgpersonal.androidonkotlin.utils.REQUEST_CODE_READ_CONTACTS
 import kotlinx.android.parcel.Parcelize
 import java.io.IOException
 
