@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
@@ -39,7 +38,7 @@ class CitiesListFragment : Fragment() {
     private val binding get() = _binding!!
     private var sharedPreferences: SharedPreferences? = null
     private var location = Russia
-    private var currentLocation: City? = null
+    private var currentLocation: City = getDefaultCity()
 
     private val viewModel: WeatherViewModelList by lazy {
         ViewModelProvider(this)[WeatherViewModelList::class.java]
@@ -107,20 +106,19 @@ class CitiesListFragment : Fragment() {
         binding.mapFragmentFAB.setOnClickListener {
             showCurrentLocationWeather()
         }
+        getCurrentLocation()
     }
 
     private fun showCurrentLocationWeather() {
         getCurrentLocation()
-        if (currentLocation != null) {
-            activity?.run {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
-                        putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation!!))
-                    }))
-                    .addToBackStack("")
-                    .commit()
-            }
+        activity?.run {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
+                    putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation))
+                }))
+                .addToBackStack("")
+                .commit()
         }
     }
 
