@@ -179,11 +179,21 @@ class CitiesListFragment : Fragment() {
                 getString(R.string.location_alert_title),
                 getString(R.string.location_alert_request_text)
             )) {
-            if (hasGps) {
+            if (hasGps && checkPermission(
+                    requireActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    getString(R.string.location_alert_title),
+                    getString(R.string.location_alert_request_text)
+            )) {
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 500L,
                     0F, locationListener)
-            } else {
+            } else if (checkPermission(
+                    requireActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    getString(R.string.location_alert_title),
+                    getString(R.string.location_alert_request_text)
+            )){
                 locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 500L,
                     0F, locationListener)

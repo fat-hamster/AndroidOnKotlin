@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.lesson9.ContactsFragment
 import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment
@@ -31,24 +32,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.history_menu_item -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, HistoryListFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
+                navigateTo(HistoryListFragment.newInstance())
             }
 
             R.id.map_menu_item -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MapsFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
+                navigateTo(MapsFragment.newInstance())
             }
 
             R.id.contacts_menu_item -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ContactsFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
+                navigateTo(ContactsFragment.newInstance())
             }
 
             else -> {
@@ -58,4 +50,12 @@ class MainActivity : AppCompatActivity() {
 
         return true
     }
+
+    private fun navigateTo(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, fragment)
+            .addToBackStack("")
+            .commit()
+    }
+
 }
