@@ -24,7 +24,6 @@ class CitiesFragmentAdapter(
 
         weatherData = data
         result.dispatchUpdatesTo(this)
-        //notifyDataSetChanged() // FIXME: исправить обновление на notifyItemChanged()
     }
 
     override fun onCreateViewHolder(

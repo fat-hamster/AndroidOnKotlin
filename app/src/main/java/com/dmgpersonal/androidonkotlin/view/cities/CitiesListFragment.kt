@@ -1,22 +1,34 @@
 package com.dmgpersonal.androidonkotlin.view.cities
 
+import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.databinding.FragmentCitiesListBinding
+import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Location.Russia
 import com.dmgpersonal.androidonkotlin.model.Location.World
 import com.dmgpersonal.androidonkotlin.model.Weather
+import com.dmgpersonal.androidonkotlin.model.getAddress
+import com.dmgpersonal.androidonkotlin.model.getDefaultCity
+import com.dmgpersonal.androidonkotlin.utils.REQUEST_CODE_READ_CONTACTS
 import com.dmgpersonal.androidonkotlin.utils.SP_KEY_LOCATION
 import com.dmgpersonal.androidonkotlin.utils.SP_REGION_SETTINGS
 import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
-import com.dmgpersonal.androidonkotlin.view.map.MapsFragment
 import com.dmgpersonal.androidonkotlin.viewmodel.AppStateLocal
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +38,8 @@ class CitiesListFragment : Fragment() {
     private var _binding: FragmentCitiesListBinding? = null
     private val binding get() = _binding!!
     private var sharedPreferences: SharedPreferences? = null
-    private var location = Russia // Временное решение, потом локацию будем получать от Android
+    private var location = Russia
+    private var currentLocation = getDefaultCity()
 
     private val viewModel: WeatherViewModelList by lazy {
         ViewModelProvider(this)[WeatherViewModelList::class.java]
@@ -92,13 +105,21 @@ class CitiesListFragment : Fragment() {
         viewModel.getWeather(location)
 
         binding.mapFragmentFAB.setOnClickListener {
-            activity?.run {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.container, MapsFragment.newInstance())
-                    .addToBackStack("")
-                    .commitAllowingStateLoss()
-            }
+            showCurrentLocationWeather()
+        }
+    }
+
+    private fun showCurrentLocationWeather() {
+        getCurrentLocation()
+        activity?.run {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
+                    putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation))
+                }))
+                .addToBackStack("")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit()
         }
     }
 
@@ -147,5 +168,62 @@ class CitiesListFragment : Fragment() {
 
     interface OnItemViewClickListener {
         fun onItemViewClick(weather: Weather)
+    }
+
+    /************************************* Location **************************************/
+    private fun checkPermission(permission: String, title: String, message: String): Boolean {
+        val permResult =
+            ContextCompat.checkSelfPermission(requireContext(), permission)
+        if (shouldShowRequestPermissionRationale(permission)) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Предоставить доступ") { _, _ ->
+                    permissionRequest(permission)
+                }
+                .setNegativeButton("Не надо") { dialog, _ -> dialog.dismiss() }
+                .create()
+                .show()
+        } else if (permResult != PackageManager.PERMISSION_GRANTED) {
+            permissionRequest(permission)
+        } else {
+            return true
+        }
+        return false
+    }
+
+    private fun permissionRequest(permission: String) {
+        requestPermissions(arrayOf(permission), REQUEST_CODE_READ_CONTACTS)
+    }
+
+    private fun getCurrentLocation() {
+        val locationManager =
+            MyApp.appContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        val hasGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val locationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                currentLocation = City(
+                    getAddress(location.latitude, location.longitude), location.latitude,
+                    location.longitude
+                )
+            }
+        }
+
+        if (hasNetwork || hasGps && checkPermission(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                getString(R.string.location_alert_title),
+                getString(R.string.location_alert_request_text)
+            )) {
+            if (hasGps) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 0,
+                    5000F, locationListener)
+            } else {
+                locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 0,
+                    5000F, locationListener)
+            }
+        }
     }
 }

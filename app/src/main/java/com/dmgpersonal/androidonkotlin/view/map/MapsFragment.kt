@@ -6,21 +6,20 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
+import com.dmgpersonal.androidonkotlin.databinding.FragmentMapsBinding
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.getAddress
 import com.dmgpersonal.androidonkotlin.model.getDefaultCity
 import com.dmgpersonal.androidonkotlin.utils.REQUEST_CODE_READ_CONTACTS
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -30,12 +29,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapsFragment : Fragment() {
 
     private var currentLocation = getDefaultCity()
+    private var _binding: FragmentMapsBinding? = null
+    private val binding get() = _binding!!
 
     private val callback = OnMapReadyCallback { googleMap ->
         val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
-        googleMap.addMarker(MarkerOptions().position(currentPosition).title("Marker in ${currentLocation.name}"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
-        //googleMap.moveCamera(CameraUpdateFactory.zoomBy(5F))
+        googleMap.addMarker(MarkerOptions()
+            .position(currentPosition).title("Marker in ${currentLocation.name}"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18F))
     }
 
     companion object {
@@ -47,14 +48,23 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        getCurrentLocation()
         mapFragment?.getMapAsync(callback)
+
+        getCurrentLocation()
+
+        binding.addressButton.setOnClickListener {
+            if (binding.addressEditText.text.isNullOrEmpty()) {
+
+            }
+        }
     }
 
     private fun checkPermission(permission: String, title: String, message: String): Boolean {
@@ -83,35 +93,31 @@ class MapsFragment : Fragment() {
     }
 
     private fun getCurrentLocation() {
-        val locationManager = MyApp.appContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager =
+            MyApp.appContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val hasNetwork = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         val hasGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val locationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                currentLocation = City(
+                    getAddress(location.latitude, location.longitude), location.latitude,
+                    location.longitude
+                )
+            }
+        }
 
-        if(hasNetwork || hasGps) {
-            if(hasGps) {
-                if(checkPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-                        getString(R.string.location_alert_title),
-                        getString(R.string.location_alert_request_text))) {
-                    locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER, 0, 5000F,
-                        object :
-                            LocationListener {
-                            override fun onLocationChanged(location: Location) {
-                                currentLocation = City(getAddress(location.latitude, location.longitude)
-                                    , location.latitude, location.longitude)
-                            }
-                        })
-                }
+        if (hasNetwork || hasGps && checkPermission(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                getString(R.string.location_alert_title),
+                getString(R.string.location_alert_request_text)
+            )) {
+            if (hasGps) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+                    5000F, locationListener)
             } else {
                 locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 0, 5000F,
-                    object : LocationListener {
-                        override fun onLocationChanged(location: Location) {
-                            currentLocation = City(getAddress(location.latitude, location.longitude)
-                                , location.latitude, location.longitude)
-                        }
-                    }
-                )
+                    LocationManager.NETWORK_PROVIDER, 0,
+                    5000F, locationListener)
             }
         }
     }
