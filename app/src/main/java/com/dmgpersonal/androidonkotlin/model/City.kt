@@ -1,11 +1,6 @@
 package com.dmgpersonal.androidonkotlin.model
 
-import android.content.Context
-import android.location.Address
 import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Parcelable
 import android.util.Log
 import com.dmgpersonal.androidonkotlin.MyApp
@@ -19,18 +14,22 @@ data class City(
     val lon: Double
 ) : Parcelable
 
-fun getAddress(lat: Double, lng: Double): String {
+fun getAddress(lat: Double, lon: Double): City {
     val geocoder = Geocoder(MyApp.appContext)
-    var location: String
+    var currentCityName: City
     try {
-        val list = geocoder.getFromLocation(lat, lng, 1)
-        location = list[0].locality
+        val list = geocoder.getFromLocation(lat, lon, 1).last()
+        if(list.locality != null) {
+            currentCityName = City(list.locality, lat, lon)
+        } else {
+            currentCityName = City(list.getAddressLine(0), lat, lon)
+        }
     } catch (e: IOException) {
-        location = "Unknown"
+        currentCityName = getDefaultCity()
         Log.d("@@@", e.toString())
     }
 
-    return location
+    return currentCityName
 }
 
 fun getCoordinates(cityName: String): City {

@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.databinding.FragmentMapsBinding
-import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.getAddress
 import com.dmgpersonal.androidonkotlin.model.getDefaultCity
 import com.dmgpersonal.androidonkotlin.utils.REQUEST_CODE_READ_CONTACTS
@@ -99,10 +98,7 @@ class MapsFragment : Fragment() {
         val hasGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                currentLocation = City(
-                    getAddress(location.latitude, location.longitude), location.latitude,
-                    location.longitude
-                )
+                currentLocation = getAddress(location.latitude, location.longitude)
             }
         }
 

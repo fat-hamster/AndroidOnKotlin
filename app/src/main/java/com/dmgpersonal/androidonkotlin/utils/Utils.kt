@@ -7,10 +7,7 @@ import com.dmgpersonal.androidonkotlin.model.getAddress
 import com.dmgpersonal.androidonkotlin.model.room.WeatherEntity
 
 fun convertDtoToWeather(weatherDTO: WeatherDTO): Weather {
-    return Weather(
-        City(
-            getAddress(weatherDTO.info.lat, weatherDTO.info.lon),
-            weatherDTO.info.lat, weatherDTO.info.lon),
+    return Weather(getAddress(weatherDTO.info.lat, weatherDTO.info.lon),
         temperature = weatherDTO.fact.temp,
         feelsLike = weatherDTO.fact.feelsLike,
         icon = weatherDTO.fact.icon

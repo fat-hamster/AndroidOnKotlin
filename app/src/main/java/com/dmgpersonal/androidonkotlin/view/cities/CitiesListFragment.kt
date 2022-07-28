@@ -39,7 +39,7 @@ class CitiesListFragment : Fragment() {
     private val binding get() = _binding!!
     private var sharedPreferences: SharedPreferences? = null
     private var location = Russia
-    private var currentLocation = getDefaultCity()
+    private var currentLocation: City? = null
 
     private val viewModel: WeatherViewModelList by lazy {
         ViewModelProvider(this)[WeatherViewModelList::class.java]
@@ -111,15 +111,16 @@ class CitiesListFragment : Fragment() {
 
     private fun showCurrentLocationWeather() {
         getCurrentLocation()
-        activity?.run {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
-                    putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation))
-                }))
-                .addToBackStack("")
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .commit()
+        if (currentLocation != null) {
+            activity?.run {
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
+                        putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation!!))
+                    }))
+                    .addToBackStack("")
+                    .commit()
+            }
         }
     }
 
@@ -203,10 +204,7 @@ class CitiesListFragment : Fragment() {
         val hasGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                currentLocation = City(
-                    getAddress(location.latitude, location.longitude), location.latitude,
-                    location.longitude
-                )
+                currentLocation = getAddress(location.latitude, location.longitude)
             }
         }
 
@@ -217,12 +215,12 @@ class CitiesListFragment : Fragment() {
             )) {
             if (hasGps) {
                 locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 0,
-                    5000F, locationListener)
+                    LocationManager.GPS_PROVIDER, 500L,
+                    0F, locationListener)
             } else {
                 locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 0,
-                    5000F, locationListener)
+                    LocationManager.NETWORK_PROVIDER, 500L,
+                    0F, locationListener)
             }
         }
     }
