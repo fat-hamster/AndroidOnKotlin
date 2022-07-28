@@ -38,7 +38,7 @@ class CitiesListFragment : Fragment() {
     private val binding get() = _binding!!
     private var sharedPreferences: SharedPreferences? = null
     private var location = Russia
-    private var currentLocation: City = getDefaultCity()
+    private var currentLocation = getDefaultCity()
 
     private val viewModel: WeatherViewModelList by lazy {
         ViewModelProvider(this)[WeatherViewModelList::class.java]
@@ -46,8 +46,7 @@ class CitiesListFragment : Fragment() {
 
     private val adapter = CitiesFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemViewClick(weather: Weather) {
-            activity?.run {
-                supportFragmentManager
+            requireActivity().supportFragmentManager
                     .beginTransaction()
                     .add(R.id.container, WeatherFragmentDetails.newInstance(
                         Bundle().apply {
@@ -57,7 +56,6 @@ class CitiesListFragment : Fragment() {
                     .addToBackStack("")
                     .commitAllowingStateLoss()
             }
-        }
     })
 
     companion object {
@@ -111,16 +109,14 @@ class CitiesListFragment : Fragment() {
 
     private fun showCurrentLocationWeather() {
         getCurrentLocation()
-        activity?.run {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
-                    putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation))
-                }))
-                .addToBackStack("")
-                .commit()
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container, WeatherFragmentDetails.newInstance(Bundle().apply {
+                putParcelable(WeatherFragmentDetails.BUNDLE_EXTRA, Weather(currentLocation))
+            }))
+            .addToBackStack("")
+            .commit()
         }
-    }
 
     private fun renderData(appState: AppStateLocal) = when (appState) {
         is AppStateLocal.Success -> {
@@ -169,7 +165,7 @@ class CitiesListFragment : Fragment() {
         fun onItemViewClick(weather: Weather)
     }
 
-    /************************************* Location **************************************/
+    /*************************************** Location ***************************************/
     private fun checkPermission(permission: String, title: String, message: String): Boolean {
         val permResult =
             ContextCompat.checkSelfPermission(requireContext(), permission)

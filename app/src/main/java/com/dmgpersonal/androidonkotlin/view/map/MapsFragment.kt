@@ -35,7 +35,7 @@ class MapsFragment : Fragment() {
         val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
         googleMap.addMarker(MarkerOptions()
             .position(currentPosition).title("Marker in ${currentLocation.name}"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18F))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 12F))
     }
 
     companion object {
@@ -46,7 +46,7 @@ class MapsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -66,6 +66,7 @@ class MapsFragment : Fragment() {
         }
     }
 
+    /*************************************** Location ***************************************/
     private fun checkPermission(permission: String, title: String, message: String): Boolean {
         val permResult =
             ContextCompat.checkSelfPermission(requireContext(), permission)
