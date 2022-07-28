@@ -109,12 +109,12 @@ class MapsFragment : Fragment() {
                 getString(R.string.location_alert_request_text)
             )) {
             if (hasGps) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-                    5000F, locationListener)
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500,
+                    0F, locationListener)
             } else {
                 locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 0,
-                    5000F, locationListener)
+                    LocationManager.NETWORK_PROVIDER, 500,
+                    0F, locationListener)
             }
         }
     }
