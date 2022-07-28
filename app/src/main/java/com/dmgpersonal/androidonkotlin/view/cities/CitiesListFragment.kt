@@ -16,6 +16,7 @@ import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.utils.SP_KEY_LOCATION
 import com.dmgpersonal.androidonkotlin.utils.SP_REGION_SETTINGS
 import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
+import com.dmgpersonal.androidonkotlin.view.map.MapsFragment
 import com.dmgpersonal.androidonkotlin.viewmodel.AppStateLocal
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList
 import com.google.android.material.snackbar.Snackbar
@@ -89,6 +90,16 @@ class CitiesListFragment : Fragment() {
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { appState -> renderData(appState) }
         viewModel.getWeather(location)
+
+        binding.mapFragmentFAB.setOnClickListener {
+            activity?.run {
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, MapsFragment.newInstance())
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+        }
     }
 
     private fun renderData(appState: AppStateLocal) = when (appState) {
