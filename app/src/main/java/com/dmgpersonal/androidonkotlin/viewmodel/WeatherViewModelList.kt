@@ -3,7 +3,6 @@ package com.dmgpersonal.androidonkotlin.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dmgpersonal.androidonkotlin.model.Location
-import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.repository.RepositoryLocalImpl
 import com.dmgpersonal.androidonkotlin.model.repository.RepositoryWeatherFromLocal
 

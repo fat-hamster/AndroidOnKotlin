@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.dmgpersonal.androidonkotlin.model.City
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
-import com.dmgpersonal.androidonkotlin.model.getAddress
 import com.dmgpersonal.androidonkotlin.model.repository.RemoteDataSource
 import com.dmgpersonal.androidonkotlin.model.repository.RetrofitRepositoryImpl
 import com.dmgpersonal.androidonkotlin.utils.REQUEST_ERROR

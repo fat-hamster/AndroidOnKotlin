@@ -11,7 +11,6 @@ import com.dmgpersonal.androidonkotlin.databinding.FragmentHistoryListBinding
 import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.viewmodel.AppStateRoom
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherHistoryModelFromRoom
-import com.google.android.material.snackbar.Snackbar
 
 class HistoryListFragment : Fragment() {
 
@@ -40,15 +39,6 @@ class HistoryListFragment : Fragment() {
 
     companion object {
         fun newInstance() = HistoryListFragment()
-    }
-
-    private fun View.showSnackBar(
-        text: String,
-        actionText: String,
-        action: (View) -> Unit,
-        length: Int = Snackbar.LENGTH_INDEFINITE
-    ) {
-        Snackbar.make(this, text, length).setAction(actionText, action).show()
     }
 
     override fun onCreateView(
