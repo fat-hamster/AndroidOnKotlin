@@ -37,14 +37,14 @@ class ContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkPermission(
+        if(checkPermission(
             Manifest.permission.READ_CONTACTS,
             "Доступ к контактам",
             "Разрешение требуется для отображения контактов"
-        )
+        )) getContacts()
     }
 
-    private fun checkPermission(permission: String, title: String, message: String) {
+    private fun checkPermission(permission: String, title: String, message: String): Boolean {
         val permResult =
             ContextCompat.checkSelfPermission(requireContext(), permission)
         if (shouldShowRequestPermissionRationale(permission)) {
@@ -60,8 +60,9 @@ class ContactsFragment : Fragment() {
         } else if (permResult != PackageManager.PERMISSION_GRANTED) {
             permissionRequest(permission)
         } else {
-            getContacts()
+            return true
         }
+        return false
     }
 
     override fun onRequestPermissionsResult(

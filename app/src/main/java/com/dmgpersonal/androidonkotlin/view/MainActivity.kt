@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.lesson9.ContactsFragment
 import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment

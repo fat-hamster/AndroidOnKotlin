@@ -9,4 +9,6 @@
     <string name="reload">Retry</string>
     <string name="history">History</string>
     <string name="map">Map</string>
+    <string name="location_alert_title">Доступ к геолокации</string>
+    <string name="location_alert_request_text">Для определения текущего местоположения необходимо предоставить доступ к геолокации</string>
 </resources>
