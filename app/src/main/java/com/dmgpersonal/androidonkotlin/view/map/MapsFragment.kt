@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.R
@@ -36,14 +37,16 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
-        googleMap.addMarker(MarkerOptions()
-            .position(currentPosition).title("Marker in ${currentLocation.name}"))
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(currentPosition).title("Marker in ${currentLocation.name}")
+        )
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, MAP_ZOOM_VALUE))
         googleMap.uiSettings.isZoomControlsEnabled = true
-        map = googleMap
-        map.setOnMapClickListener {
+        googleMap.setOnMapClickListener {
             hideKeyboard(requireView())
         }
+        map = googleMap
     }
 
     companion object {
@@ -62,33 +65,39 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment?
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
-        binding.addressButton.setOnClickListener {
-            if (!binding.addressEditText.text.isNullOrEmpty()) {
-                currentLocation = getCoordinates(binding.addressEditText.text.toString())
-                hideKeyboard(it)
-                setMarker()
-            }
-        }
+        binding.addressButton.setOnClickListener { setMarker() }
     }
 
     private fun setMarker() {
-        if(checkPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                getString(R.string.location_alert_title),
-                getString(R.string.location_alert_request_text)
-        )) {
-            val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
-            map.addMarker(
-                MarkerOptions()
-                    .position(currentPosition)
-                    .title(currentLocation.name)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-            )
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, MAP_ZOOM_VALUE))
+        if (!binding.addressEditText.text.isNullOrEmpty()) {
+            currentLocation = getCoordinates(binding.addressEditText.text.toString())
+            hideKeyboard(requireView())
+            if (currentLocation.name.contains("Default city")) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Ошибка")
+                    .setMessage("Локация ${binding.addressEditText.text.toString()} не найдена")
+                    .setNeutralButton("OK") { _, _ -> hideKeyboard(requireView()) }
+                    .create()
+                    .show()
+                binding.addressEditText.text!!.clear()
+            } else if (checkPermission(
+                    requireActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    getString(R.string.location_alert_title),
+                    getString(R.string.location_alert_request_text)))
+            {
+                val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
+                map.addMarker(
+                    MarkerOptions()
+                        .position(currentPosition)
+                        .title(currentLocation.name)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)))
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, MAP_ZOOM_VALUE))
+            }
         }
     }
 
@@ -109,25 +118,30 @@ class MapsFragment : Fragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 getString(R.string.location_alert_title),
                 getString(R.string.location_alert_request_text)
-            )) {
+            )
+        ) {
             if (hasGps && checkPermission(
                     requireActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     getString(R.string.location_alert_title),
                     getString(R.string.location_alert_request_text)
-            )) {
+                )
+            ) {
                 locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, 500L,
-                    0F, locationListener)
-            } else if(checkPermission(
+                    0F, locationListener
+                )
+            } else if (checkPermission(
                     requireActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     getString(R.string.location_alert_title),
                     getString(R.string.location_alert_request_text)
-            )){
+                )
+            ) {
                 locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, 500L,
-                    0F, locationListener)
+                    0F, locationListener
+                )
             }
         }
     }

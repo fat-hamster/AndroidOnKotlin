@@ -10,7 +10,7 @@ import java.io.IOException
 
 @Parcelize
 data class City(
-    val name: String,
+    val name: String = "Default city",
     val lat: Double,
     val lon: Double
 ) : Parcelable
@@ -35,12 +35,13 @@ fun getAddress(lat: Double, lon: Double): City {
 
 fun getCoordinates(cityName: String): City {
     val geocoder = Geocoder(MyApp.appContext)
-    var currentLocation: City
+    var currentLocation = City(lat = -1.0, lon = -1.0)
     try {
         val location = geocoder.getFromLocationName(cityName, 1)
-        currentLocation = City(cityName, location.first().latitude, location.first().longitude)
+        if(location.isNotEmpty()) {
+            currentLocation = City(cityName, location.first().latitude, location.first().longitude)
+        }
     } catch (e: IOException) {
-        currentLocation = getDefaultCity()
         Log.d("@@@", e.toString())
     }
     return currentLocation
