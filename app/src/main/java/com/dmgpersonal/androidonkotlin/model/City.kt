@@ -19,11 +19,11 @@ fun getAddress(lat: Double, lon: Double): City {
     var currentCityName: City
     try {
         val list = geocoder.getFromLocation(lat, lon, 1).last()
-        if(list.locality != null) {
-            currentCityName = City(list.locality, lat, lon)
-        } else {
-            currentCityName = City(list.getAddressLine(0), lat, lon)
-        }
+        currentCityName =
+            if(list.locality != null)
+                { City(list.locality, lat, lon) }
+            else
+                { City(list.getAddressLine(0), lat, lon) }
     } catch (e: IOException) {
         currentCityName = getDefaultCity()
         Log.d("@@@", e.toString())
