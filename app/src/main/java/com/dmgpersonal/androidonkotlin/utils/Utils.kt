@@ -2,6 +2,8 @@ package com.dmgpersonal.androidonkotlin.utils
 
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
@@ -57,4 +59,9 @@ fun checkPermission(activity: Activity, permission: String, title: String, messa
 
 private fun permissionRequest(activity: Activity, permission: String) {
     requestPermissions(activity, arrayOf(permission), REQUEST_CODE_READ_CONTACTS)
+}
+
+fun hideKeyboard(view: View) {
+    val inputMethodManager = MyApp.appContext.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }

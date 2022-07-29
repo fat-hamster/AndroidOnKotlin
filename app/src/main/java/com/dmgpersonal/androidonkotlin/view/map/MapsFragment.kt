@@ -16,11 +16,14 @@ import com.dmgpersonal.androidonkotlin.databinding.FragmentMapsBinding
 import com.dmgpersonal.androidonkotlin.model.getAddress
 import com.dmgpersonal.androidonkotlin.model.getCoordinates
 import com.dmgpersonal.androidonkotlin.model.getDefaultCity
+import com.dmgpersonal.androidonkotlin.utils.MAP_ZOOM_VALUE
 import com.dmgpersonal.androidonkotlin.utils.checkPermission
+import com.dmgpersonal.androidonkotlin.utils.hideKeyboard
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
@@ -32,11 +35,15 @@ class MapsFragment : Fragment() {
     private lateinit var map: GoogleMap
 
     private val callback = OnMapReadyCallback { googleMap ->
-        map = googleMap
         val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
         googleMap.addMarker(MarkerOptions()
             .position(currentPosition).title("Marker in ${currentLocation.name}"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 12F))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, MAP_ZOOM_VALUE))
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        map = googleMap
+        map.setOnMapClickListener {
+            hideKeyboard(requireView())
+        }
     }
 
     companion object {
@@ -55,22 +62,34 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
         binding.addressButton.setOnClickListener {
             if (!binding.addressEditText.text.isNullOrEmpty()) {
                 currentLocation = getCoordinates(binding.addressEditText.text.toString())
+                hideKeyboard(it)
                 setMarker()
             }
         }
     }
 
     private fun setMarker() {
-        val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
-        map.addMarker(MarkerOptions()
-            .position(currentPosition).title("Marker in ${currentLocation.name}"))
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 12F))
+        if(checkPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                getString(R.string.location_alert_title),
+                getString(R.string.location_alert_request_text)
+        )) {
+            val currentPosition = LatLng(currentLocation.lat, currentLocation.lon)
+            map.addMarker(
+                MarkerOptions()
+                    .position(currentPosition)
+                    .title(currentLocation.name)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+            )
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, MAP_ZOOM_VALUE))
+        }
     }
 
     /*************************************** Location ***************************************/

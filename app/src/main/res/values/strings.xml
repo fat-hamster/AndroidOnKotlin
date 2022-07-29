@@ -11,4 +11,6 @@
     <string name="map">Map</string>
     <string name="location_alert_title">Доступ к геолокации</string>
     <string name="location_alert_request_text">Для определения текущего местоположения необходимо предоставить доступ к геолокации</string>
+    <string name="find">Найти</string>
+    <string name="search_hint_text">введите адрес для поиска</string>
 </resources>
