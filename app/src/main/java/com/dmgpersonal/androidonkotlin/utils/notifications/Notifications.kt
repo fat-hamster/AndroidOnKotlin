@@ -2,14 +2,11 @@ package com.dmgpersonal.androidonkotlin.utils.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.utils.NOTIFICATION_HIGH_CHANNEL
-import com.dmgpersonal.androidonkotlin.view.MainActivity
 
 val NOTIFICATION_ID = 101
 
