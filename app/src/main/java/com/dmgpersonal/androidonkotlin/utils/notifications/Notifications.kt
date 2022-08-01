@@ -12,6 +12,7 @@ val NOTIFICATION_ID = 101
 
 fun pushNotification(title: String, body: String) {
     val notificationManager = MyApp.appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
     val notification = NotificationCompat.Builder(MyApp.appContext, NOTIFICATION_HIGH_CHANNEL).apply {
         setContentTitle(title)
         setContentText(body)

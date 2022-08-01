@@ -1,6 +1,8 @@
 package com.dmgpersonal.androidonkotlin.utils.notifications
 
 import android.util.Log
+import com.dmgpersonal.androidonkotlin.utils.NOTIFICATION_KEY_MESSAGE
+import com.dmgpersonal.androidonkotlin.utils.NOTIFICATION_KEY_TITLE
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -14,8 +16,11 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        if(message.data.isNotEmpty()) {
-            pushNotification(message.from.toString(), message.notification?.body.toString())
+        val data = message.data
+        val title = data[NOTIFICATION_KEY_TITLE]
+        val body = data[NOTIFICATION_KEY_MESSAGE]
+        if(!title.isNullOrEmpty() && !body.isNullOrEmpty()) {
+            pushNotification(title, body)
         }
 
         super.onMessageReceived(message)

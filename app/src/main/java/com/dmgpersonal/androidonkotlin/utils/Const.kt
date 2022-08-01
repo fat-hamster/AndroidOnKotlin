@@ -21,3 +21,5 @@ const val MAP_ZOOM_VALUE = 10F
 const val NOTIFICATION_LOW_CHANNEL = "low priority channel"
 const val NOTIFICATION_MEDIUM_CHANNEL = "medium priority channel"
 const val NOTIFICATION_HIGH_CHANNEL = "high priority channel"
+const val NOTIFICATION_KEY_TITLE = "myTitle"
+const val NOTIFICATION_KEY_MESSAGE = "myMessage"
