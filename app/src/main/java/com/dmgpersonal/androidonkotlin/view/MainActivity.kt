@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.dmgpersonal.androidonkotlin.R
 import com.dmgpersonal.androidonkotlin.lesson9.ContactsFragment
+import com.dmgpersonal.androidonkotlin.utils.notifications.pushNotification
 import com.dmgpersonal.androidonkotlin.view.cities.CitiesListFragment
 import com.dmgpersonal.androidonkotlin.view.history.HistoryListFragment
 import com.dmgpersonal.androidonkotlin.view.map.MapsFragment
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.container, CitiesListFragment.newInstance())
                 .commitNow()
         }
+
+        pushNotification("Message", "Main activity is start!")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -17,3 +17,7 @@ const val CORRUPTED_DATA = "Неполные данные"
 const val REQUEST_CODE_READ_CONTACTS = 687
 
 const val MAP_ZOOM_VALUE = 10F
+
+const val NOTIFICATION_LOW_CHANNEL = "low priority channel"
+const val NOTIFICATION_MEDIUM_CHANNEL = "medium priority channel"
+const val NOTIFICATION_HIGH_CHANNEL = "high priority channel"
