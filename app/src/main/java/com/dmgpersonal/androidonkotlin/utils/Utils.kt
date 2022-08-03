@@ -1,5 +1,6 @@
 package com.dmgpersonal.androidonkotlin.utils
 
+import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.view.View
@@ -14,6 +15,7 @@ import com.dmgpersonal.androidonkotlin.model.Weather
 import com.dmgpersonal.androidonkotlin.model.dto.WeatherDTO
 import com.dmgpersonal.androidonkotlin.model.getAddress
 import com.dmgpersonal.androidonkotlin.model.room.WeatherEntity
+
 
 fun convertDtoToWeather(weatherDTO: WeatherDTO): Weather {
     return Weather(getAddress(weatherDTO.info.lat, weatherDTO.info.lon),
@@ -59,6 +61,15 @@ fun checkPermission(activity: Activity, permission: String, title: String, messa
 
 private fun permissionRequest(activity: Activity, permission: String) {
     requestPermissions(activity, arrayOf(permission), REQUEST_CODE_READ_CONTACTS)
+}
+
+fun requestNotificationPermission(activity: Activity) {
+    if (ContextCompat.checkSelfPermission(MyApp.appContext,
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY) == PackageManager.PERMISSION_GRANTED)
+        return
+
+    requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY),
+        NOTIFICATION_PERMISSION_CODE)
 }
 
 fun hideKeyboard(view: View) {

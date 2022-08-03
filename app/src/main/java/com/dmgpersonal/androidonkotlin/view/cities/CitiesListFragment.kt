@@ -23,7 +23,6 @@ import com.dmgpersonal.androidonkotlin.model.getDefaultCity
 import com.dmgpersonal.androidonkotlin.utils.SP_KEY_LOCATION
 import com.dmgpersonal.androidonkotlin.utils.SP_REGION_SETTINGS
 import com.dmgpersonal.androidonkotlin.utils.checkPermission
-import com.dmgpersonal.androidonkotlin.utils.notifications.pushNotification
 import com.dmgpersonal.androidonkotlin.view.details.WeatherFragmentDetails
 import com.dmgpersonal.androidonkotlin.viewmodel.AppStateLocal
 import com.dmgpersonal.androidonkotlin.viewmodel.WeatherViewModelList

@@ -1,8 +1,17 @@
 package com.dmgpersonal.androidonkotlin.utils.notifications
 
+import android.Manifest
+import android.app.Application
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.dmgpersonal.androidonkotlin.MyApp
 import com.dmgpersonal.androidonkotlin.utils.NOTIFICATION_KEY_MESSAGE
 import com.dmgpersonal.androidonkotlin.utils.NOTIFICATION_KEY_TITLE
+import com.dmgpersonal.androidonkotlin.utils.NOTIFICATION_PERMISSION_CODE
+import com.dmgpersonal.androidonkotlin.utils.requestNotificationPermission
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -20,7 +29,13 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         val title = data[NOTIFICATION_KEY_TITLE]
         val body = data[NOTIFICATION_KEY_MESSAGE]
         if(!title.isNullOrEmpty() && !body.isNullOrEmpty()) {
-            pushNotification(title, body)
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
+                if (ContextCompat.checkSelfPermission(MyApp.appContext,
+                        Manifest.permission.ACCESS_NOTIFICATION_POLICY) == PackageManager.PERMISSION_GRANTED)
+                    pushNotification(title, body)
+            } else {
+                pushNotification(title, body)
+            }
         }
 
         super.onMessageReceived(message)

@@ -23,3 +23,4 @@ const val NOTIFICATION_MEDIUM_CHANNEL = "medium priority channel"
 const val NOTIFICATION_HIGH_CHANNEL = "high priority channel"
 const val NOTIFICATION_KEY_TITLE = "myTitle"
 const val NOTIFICATION_KEY_MESSAGE = "myBody"
+const val NOTIFICATION_PERMISSION_CODE = 777

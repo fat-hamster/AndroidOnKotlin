@@ -4,7 +4,6 @@ import android.location.Geocoder
 import android.os.Parcelable
 import android.util.Log
 import com.dmgpersonal.androidonkotlin.MyApp
-import com.dmgpersonal.androidonkotlin.utils.checkPermission
 import kotlinx.android.parcel.Parcelize
 import java.io.IOException
 
