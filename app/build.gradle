@@ -23,9 +23,39 @@ android {
         viewBinding true
     }
 
-    buildTypes {
+    signingConfigs {
         release {
+            Properties properties = new Properties()
+            properties.load(rootProject.file("passwordRelease.properties").newDataInputStream())
+            def password = properties.getProperty("password")
+            storeFile file("release.jks")
+            storePassword = password
+            keyAlias 'dmgsoft'
+            keyPassword = password
+        }
+
+        release_without_proguard {
+            Properties properties = new Properties()
+            properties.load(rootProject.file("passwordReleaseNoGuard.properties").newDataInputStream())
+            def password = properties.getProperty("password")
+            storeFile file("release.jks")
+            storePassword = password
+            keyAlias 'dmgsoft'
+            keyPassword = password
+        }
+    }
+
+    buildTypes {
+
+        release_without_proguard {
+            signingConfig = signingConfigs.release
             minifyEnabled false
+        }
+
+        release {
+            signingConfig = signingConfigs.release
+            multiDexEnabled true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
