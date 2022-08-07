@@ -47,9 +47,8 @@ android {
 
     buildTypes {
 
-        release_without_proguard {
+        ReleaseWithoutProguard {
             signingConfig = signingConfigs.release
-            minifyEnabled false
         }
 
         release {

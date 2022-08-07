@@ -4,14 +4,19 @@ package com.dmgpersonal.androidonkotlin.model.dto
 import com.google.gson.annotations.SerializedName
 
 data class PartDTO(
+    @SerializedName("condition")
     val condition: String,
+    @SerializedName("daytime")
     val daytime: String,
     @SerializedName("feels_like")
     val feelsLike: Int,
+    @SerializedName("humidity")
     val humidity: Int,
+    @SerializedName("icon")
     val icon: String,
     @SerializedName("part_name")
     val partName: String,
+    @SerializedName("polar")
     val polar: Boolean,
     @SerializedName("prec_mm")
     val precMm: Int,
